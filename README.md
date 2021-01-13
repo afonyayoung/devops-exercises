@@ -2,7 +2,7 @@
 
 :information_source: &nbsp;This repo contains questions and exercises on various technical topics, sometimes related to DevOps and SRE :)
 
-:bar_chart: &nbsp;There are currently **1344** questions
+:bar_chart: &nbsp;There are currently **1417** questions
 
 :busts_in_silhouette: &nbsp;[Join](https://www.facebook.com/groups/538897960007080) our [Facebook group](https://www.facebook.com/groups/538897960007080) for additional exercises, articles and more resources on DevOps
 
@@ -68,7 +68,7 @@
   </tr>
   <tr>
     <td align="center"><a href="#certificates"><img src="images/certificates.png" width="75px;" height="75px;" alt="Certificates"/><br /><b>Certificates</b></a></td>
-    <td align="center"><a href="#docker"><img src="images/docker.png" width="70px;" height="75px;" alt="Docker"/><br /><b>Docker</b></a></td>
+    <td align="center"><a href="#containers"><img src="images/containers.png" width="70px;" height="75px;" alt="Containers"/><br /><b>Containers</b></a></td>
     <td align="center"><a href="#sql"><img src="images/sql.png" width="75px;" height="75px;" alt="sql"/><br /><b>SQL</b></a></td>
     <td align="center"><a href="#openshift"><img src="images/openshift.png" width="75px;" height="75px;" alt="OpenShift"/><br /><b>OpenShift</b></a></td>
     <td align="center"><a href="#storage"><img src="images/storage.png" width="75px;" height="75px;" alt="Storage"/><br /><b>Storage</b></a></td>
@@ -103,24 +103,20 @@ Red Hat:
 <details>
 <summary>What are the benefits of DevOps? What it can help us to achieve?</summary><br><b>
 
-You should mention some or all of the following:
-
   * Collaboration
   * Improved delivery
   * Security
   * Speed
   * Scale
   * Reliability
-
-Make sure to elaborate :)
 </b></details>
 
 <details>
 <summary>What are the anti-patterns of DevOps?</summary><br><b>
 
-* Not allowing to push in production on Friday :)
-* One specific person is in charge of different tasks. For example there is only one person who is allowed to merge the code of everyone else
+* One person is in charge of different tasks. For example there is only one person who is allowed to merge the code of everyone else
 * Treating production differently from development environment. For example, not implementing security in development environment
+* Not allowing to push to production on Friday ;)
 </b></details>
 
 <details>
@@ -132,9 +128,29 @@ Each piece of code (change/patch) is verified, to make the change is safe to mer
 </b></details>
 
 <details>
+<summary>Can you describe an example of a CI (and/or CD) process starting the moment a developer submitted a change/PR to a repository?</summary><br><b>
+
+There is no one answer for such question as CI processes vary depending on the technologies used and the type of the project to where the change was submitted.
+Such processes can include one or more of the following stages:
+
+* Compile 
+* Build
+* Install
+* Configure
+* Update
+* Test
+
+For example:
+
+A developer submitted a PR to a project. The PR triggered two jobs (or one combined job). One job for lint-testing the change and the second job for building a package using the submitted change and running multiple api/scenario tests. Once all tests passed and the change was approved by a maintainer/core, it's merged/pushed to the repository. If some of the tests failed, the change will not be allowed to merged/pushed to the repository.
+
+A different process can describe how a developer pushes code to a repository, a workflow then triggered to build a container image and push it the registry. Once in the registry, the k8s cluster is applied with the new changes.
+</b></details>
+
+<details>
 <summary>What is Continuous Deployment?</summary><br><b>
 
-A development strategy used by developers to release software automatically into production where any code commit must pass through an automated testing phase. Only when this is successful is the release considered production worthy. This eliminates any human interaction and should be implemented only after production-ready pipelines have been set with real-time monitoring and reporting of deployed assets. If any issues are detected in production it should be easy to rollback to previous working state. 
+A development strategy used by developers to release software automatically into production where any code commit must pass through an automated testing phase. Only when this is successful is the release considered production worthy. This eliminates any human interaction and should be implemented only after production-ready pipelines have been set with real-time monitoring and reporting of deployed assets. If any issues are detected in production it should be easy to rollback to previous working state.
 
 For more info please read [here](https://www.atlassian.com/continuous-delivery/continuous-deployment)
 </b></details>
@@ -148,11 +164,19 @@ For more info please read [here](https://www.atlassian.com/continuous-delivery/c
 </b></details>
 
 <details>
+<summary>Would you prefer a "configuration->deployment" model or "deployment->configuration"?</summary><br><b>
+</b></details>
+
+<details>
 <summary>What CI/CD best practices are you familiar with? Or what do you consider as CI/CD best practice?</summary><br><b>
 </b></details>
 
 <details>
-<summary>What systems and/or tools are you using for the following?:
+<summary>Where do you store CI/CD pipelines? (Application repository, one central repository, ...)? Why?</summary><br><b>
+</b></details>
+
+<details>
+<summary>What systems and/or tools are you using for the following areas/tasks? Why?
 
   * CI/CD
   * Provisioning infrastructure
@@ -196,9 +220,10 @@ which follows the immutable infrastructure paradigm.
 <details>
 <summary>What ways are you familiar with to deliver a software? What are the advantages and disadvantages of each method?</summary><br><b>
 
-  * Archive - collect all your app files into one archive (e.g. tar) and deliver it to the user.
-  * Package - depends on the OS, you can use your OS package format (e.g. in RHEL/Fefodra it's RPM) to deliver your software with a way to install, uninstall and update it using the standard packager commands
-  * Images - Either VM or container images where your package is included with everything it needs in order to run successfully.
+  * Source - Maintain build script within version control system so that user can build your app after cloning repository. Advantage: User can quickly checkout different versions of application. Disadvantage: requires build tools installed on users machine.
+  * Archive - collect all your app files into one archive (e.g. tar) and deliver it to the user. Advantage: Only tool needed is an unarchiver. Disadvantage: Requires repeating the same procedure when updating, not good if there are a lot of dependencies.
+  * Package - depends on the OS, you can use your OS package format (e.g. in RHEL/Fefodra it's RPM) to deliver your software with a way to install, uninstall and update it using the standard packager commands. Advantages: Package manager takes care of support for installation, uninstallation, updating and dependency management. Disadvantage: Requires managing package repository.
+  * Images - Either VM or container images where your package is included with everything it needs in order to run successfully. Advantage: everything is preinstalled, it has high degree of environment isolation. Disadvantage: Requires knowledge of building and optimizing images.
 </b></details>
 
 <details>
@@ -211,6 +236,16 @@ which follows the immutable infrastructure paradigm.
 
 Stateless applications don't store any data in the host which makes it ideal for horizontal scaling and microservices.
 Stateful applications depend on the storage to save state and data, typically databases are stateful applications.
+</b></details>
+
+<details>
+<summary>What is Reliability? How does it fit DevOps?</summary><br><b>
+
+Reliability, when used in DevOps context, is the ability of a system to recover from infrastructure failure or disruption. Part of it is also being able to scale based on your organization or team demands.
+</b></details>
+
+<details>
+<summary>What "Availability" means? What means are there to track Availability of a service?</summary><br><b>
 </b></details>
 
 <details>
@@ -238,19 +273,17 @@ You should be able to explain those that you mention.
 </b></details>
 
 <details>
-<summary>You need to install periodically the same package on different operating systems (Ubuntu, RHEL, ...). How would you do it?</summary><br><b>
+<summary>You need to install periodically a package (unless it's already exists) on different operating systems (Ubuntu, RHEL, ...). How would you do it?</summary><br><b>
 
-It can be as simple as one Ansible (or other CM tool) task that runs periodically with Cron. In more advanced cases, perhaps a CI system.
+There are multiple ways to answer this question (there is no right and wrong here):
+
+* Simple cron job
+* Pipeline with configuration management technology (such Puppet, Ansible, Chef, etc.)
+...
 </b></details>
 
 <details>
-<summary>What is Reliability? How does it fit DevOps?</summary><br><b>
-
-Reliability, when used in DevOps context, is the ability of a system to recover from infrastructure failure or disruption. Part of it is also being able to scale based on your organization or team demands.
-</b></details>
-
-<details>
-<summary>Compare SRE to DevOps</summary><br><b>
+<summary>What are the differences between SRE and DevOps?</summary><br><b>
 </b></details>
 
 <details>
@@ -265,25 +298,22 @@ One can argue whether it's per company definition or a global one but at least a
 
 <details>
 <summary>What are MTTF (mean time to failure) and MTTR (mean time to repair)? What these metrics help us to evaluate?</summary><br><b>
-	
-	* MTTF (mean time to failure) other known as uptime, can be defined as how long the system run before if fails. 
-	* MTTR (mean time to recover) on the other hand, is the amount of time it takes to repair a system. 
+
+	* MTTF (mean time to failure) other known as uptime, can be defined as how long the system run before if fails.
+	* MTTR (mean time to recover) on the other hand, is the amount of time it takes to repair a system.
 	* MTBF (mean time between failues) is the amount of time between failures of the system. These errors can be intermittent or fatal.
-	
+
 </b></details>
 
-<details>
-<summary>What is a post-mortem meeting?</summary><br><b>
-</b></details>
 
 <details>
 <summary>What is "infrastructure as code"? What implementation of IAC are you familiar with?</summary><br><b>
-	IAC (infrastructure as code) is a declerative approach of defining infrastructure or architecture of a system. Some implementations are ARM templates for Azure and Terraform that can work across multiple cloud providers. 
+	IAC (infrastructure as code) is a declerative approach of defining infrastructure or architecture of a system. Some implementations are ARM templates for Azure and Terraform that can work across multiple cloud providers.
 </b></details>
 
 <details>
 <summary>How do you manage build artifacts?</summary><br><b>
-	Build artifacts are usually stored in a repository. They can be used in release pipelines for deployment purposes. Usually there is retention period on the build artifacts. 
+	Build artifacts are usually stored in a repository. They can be used in release pipelines for deployment purposes. Usually there is retention period on the build artifacts.
 </b></details>
 
 <details>
@@ -292,13 +322,13 @@ One can argue whether it's per company definition or a global one but at least a
 
 <details>
 <summary>What deployment strategies are you familiar with or have used?</summary><br><b>
-	
-	There are several deployment strategies: 
+
+	There are several deployment strategies:
 	* Rolling
 	* Blue green deployment
 	* Canary releases
 	* Recreate strategy
-	
+
 </b></details>
 
 <details>
@@ -314,12 +344,15 @@ One can argue whether it's per company definition or a global one but at least a
 </b></details>
 
 <details>
-<summary>Is it right to say implementing or practicing DevOps leads to more secure software?</summary><br><b>
+<summary>What do you think about the following sentence?: "implementing or practicing DevOps leads to more secure software"</summary><br><b>
 </b></details>
 
+<details>
+<summary>Do you know what is a "post-mortem meeting"? What is your opinion on that?</summary><br><b>
+</b></details>
 
 <details>
-<summary>Tell me how you perform plan capacity for your CI/CD resources (e.g. servers, storage, etc.)</summary><br><b>
+<summary>How do you perform plan capacity for your CI/CD resources? (e.g. servers, storage, etc.)</summary><br><b>
 </b></details>
 
 <details>
@@ -342,7 +375,7 @@ This situation might lead to bugs which hard to identify and reproduce.
 
 <details>
 <summary>How to deal with a configuration drift?</summary><br><b>
-	Configuration drift can be avoided with desired state configuration (DSC) implementation. Desired state configuration can be a declarative file that defined how a system should be. There are tools to enforce desired state such a terraform or azure dsc. There are incramental or complete strategies.  
+	Configuration drift can be avoided with desired state configuration (DSC) implementation. Desired state configuration can be a declarative file that defined how a system should be. There are tools to enforce desired state such a terraform or azure dsc. There are incramental or complete strategies.
 </b></details>
 
 <details>
@@ -363,7 +396,6 @@ Note: cross-dependency is when you have two or more changes to separate projects
 </b></details>
 
 ## Jenkins
-
 
 <details>
 <summary>What is Jenkins? What have you used it for?</summary><br><b>
@@ -472,7 +504,7 @@ You can describe the UI way to add new nodes but better to explain how to do in 
 </summary><br><b>
 </b></details>
 
-## Cloud 
+## Cloud
 
 <details>
 <summary>What is Cloud Computing? What is a Cloud Provider?</summary><br><b>
@@ -488,9 +520,9 @@ You can describe the UI way to add new nodes but better to explain how to do in 
 <details>
 <summary>What types of Cloud Computing services are there?</summary><br><b>
 
-IAAS
-PAAS
-SAAS
+IAAS - Infrastructure as a Service
+PAAS - Platform as a Service
+SAAS - Software as a Service
 </b></details>
 
 <details>
@@ -499,6 +531,9 @@ SAAS
   * IAAS
   * PAAS
   * SAAS</summary><br><b>
+  * IAAS - Users have control over complete Operating System and don't need to worry about the physical resources, which is managed by Cloud Service Provider.
+  * PAAS - CLoud Service Provider takes care of Operating System, Middlewares and users only need to focus on our Data and Application.
+  * SAAS - A cloud based method to provide software to users, software logics running on cloud, can be run on-premises or managed by Cloud Service Provider.
 </b></details>
 
 <details>
@@ -513,10 +548,11 @@ SAAS
 <summary>Explain each of the following Cloud Computing Deployments:
 
   * Public
-  * Hybrid
-  * Private</summary><br><b>
-
-  * Hybrid - combination of public and private clouds
+  * Private
+  * Hybrid</summary><br><b>
+  * Public - Cloud services sharing computing resources among multiple customers
+  * Private - Cloud services having computing resources limited to specific customer or organization, managed by third party or organizations itself
+  * Hybrid - Combination of public and private clouds
 </b></details>
 
 <details>
@@ -717,10 +753,10 @@ False. Charges are being made when the code is executed.
 <summary>Which of the following set of languages Lambda supports?
 
   * R, Swift, Rust, Kotlin
-  * Python, Ruby, Go 
+  * Python, Ruby, Go
   * Python, Ruby, PHP</summary><br><b>
 
-  * Python, Ruby, Go 
+  * Python, Ruby, Go
 </b></details>
 
 #### AWS Containers
@@ -750,7 +786,7 @@ Learn more [here](https://aws.amazon.com/fargate)
 </b></details>
 
 #### AWS Storage
- 
+
 <details>
 <summary>Explain what is AWS S3?</summary><br><b>
 
@@ -820,7 +856,7 @@ Storage classes offered today:
     * Less expensive than Standard and Standard-IA storage classes
     * 2x9% durability
     * 99.50% availability
- 
+
   * Intelligent-Tiering:
     * Long-lived data with changing or unknown access patterns. Basically, In this class the data automatically moves to the class most suitable for you based on usage patterns
     * Price depends on the used class
@@ -1015,7 +1051,7 @@ False. Auto scaling adjusts capacity and this can mean removing some resources b
   * Classic LB - low costs, good for test or dev environments
 </b></details>
 
-#### AWS Security 
+#### AWS Security
 
 <details>
 <summary>What is the shared responsibility model? What AWS is responsible for and what the user is responsible for based on the shared responsibility model?</summary><br><b>
@@ -1195,7 +1231,7 @@ cloud data warehouse
 <details>
 <summary>What is AWS ElastiCache? For what cases is it used?</summary><br><b>
 
-Amazon Elasticache is a fully managed Redis or Memcached in-memory data store.                                                                       
+Amazon Elasticache is a fully managed Redis or Memcached in-memory data store.
 It's great for use cases like two-tier web applications where the most frequently accesses data is stored in ElastiCache so response time is optimal.
 </b></details>
 
@@ -1526,7 +1562,7 @@ Read more about it [here](https://aws.amazon.com/sns)
   * Publishers</summary><br><b>
 
   * Topics - used for grouping multiple endpoints
-  * Subscribers - the endpoints where topics send messages to 
+  * Subscribers - the endpoints where topics send messages to
   * Publishers - the provider of the message (event, person, ...)
 </b></details>
 
@@ -1947,7 +1983,7 @@ A router is a physical or virtual appliance that passes information between two 
 <details>
 <summary>What is NAT?</summary><br><b>
 
- Network Address Translation (NAT) is a process in which one or more local IP address is translated into one or more Global IP address and vice versa in order to provide Internet access to the local hosts. 
+ Network Address Translation (NAT) is a process in which one or more local IP address is translated into one or more Global IP address and vice versa in order to provide Internet access to the local hosts.
 
 
 </b></details>
@@ -1990,7 +2026,7 @@ Bonus question: what is the RTT of LAN?
 
 <details>
 <summary>What is the difference between TCP and UDP?</summary><br><b>
-	
+
 TCP establishes a connection between the client and the server to guarantee the order of the packages, on the other hand, UDP does not establish a connection between client and server and doesn't handle package order. This makes UDP more lightweight than TCP and a perfect candidate for services like streaming.
 
 [Penguintutor.com](http://www.penguintutor.com/linux/basic-network-reference) provides a good explanation.
@@ -2158,7 +2194,7 @@ There is also "Management Plane" which refers to monitoring and management funct
 
 <details>
 <summary>What is HSTS?</summary><br><b>
-HTTP Strict Transport Security is a web server directive that informs user agents and web browsers how to handle its connection through a response header sent at the very beginning and back to the browser. This forces connections over HTTPS encryption, disregarding any script's call to load any resource in that domain over HTTP. 
+HTTP Strict Transport Security is a web server directive that informs user agents and web browsers how to handle its connection through a response header sent at the very beginning and back to the browser. This forces connections over HTTPS encryption, disregarding any script's call to load any resource in that domain over HTTP.
 
 Read more [here](https://www.globalsign.com/en/blog/what-is-hsts-and-how-do-i-use-it#:~:text=HTTP%20Strict%20Transport%20Security%20(HSTS,and%20back%20to%20the%20browser.)
 </b></details>
@@ -2185,21 +2221,19 @@ An open question. Answer based on your real experience. You can highlight one or
 <summary>Explain what each of the following commands does and give an example on how to use it:
 
   * ls
-  * rm 
+  * rm
   * rmdir (can you achieve the same result by using <code>rm</code>?)
-  * grep
   * touch
   * whoami
   * man
-  * nslookup or dig
   * pwd
   * df
   * file
   * cat
-  * less
-  * history
   * cp
   * mv
+  * grep
+  * nslookup or dig
   * mkdir
   * find
   * alias</summary><br><b>
@@ -2207,19 +2241,17 @@ An open question. Answer based on your real experience. You can highlight one or
   * ls - list files and directories. You can highlight common flags like -d, -a, -l, ...
   * rm - remove files and directories. You should mention -r for recursive removal
   * rmdir - remove directories but you should mention it's possible to use rm for that
-  * grep - print lines that match patterns. Could be nice to mention -v, -r, -E flags
   * touch - update timestamps but common usage is to create files
   * whoami - current logged-in user
   * man - reference manuals
-  * nslookup or dig - query nameservers
   * pwd - print working directory
   * df - provides info regarding file system disk space usage
   * file - to find out what kind of a file it is
   * cat - quickly read a file without opening the file, it only displays the file contents
-  * less - view text files larger than a simple output
-  * history - get the history of the commands previously entered
   * cp - make a copy of files and pasting it to a destination
   * mv - moving files and also renaming them
+  * grep - print lines that match patterns. Could be nice to mention -v, -r, -E flags
+  * nslookup or dig - query nameservers
   * mkdir - create a directory if it does not exist already
   * find - searching files
   * alias - shorten repetitive long commands for efficient command line usage
@@ -2228,6 +2260,7 @@ An open question. Answer based on your real experience. You can highlight one or
 <details>
 <summary>What each of the following commands does?
 
+  * cd /
   * cd ~
   * cd
   * cd ..
@@ -2235,11 +2268,12 @@ An open question. Answer based on your real experience. You can highlight one or
   * cd -</summary><br><b>
   cd or "change directory" helps one to change directory when they want to.
 
-  * cd ~ -> this defaults to your "home directory"
-  * cd -> this defaults to your "home directory"
-  * cd .. -> goes to the directory above your current i.e parent directory
-  * cd . -> this is the directory you currently in
-  * cd - -> takes you the previous directory you were just at
+  * cd / -> change to the root directory
+  * cd ~ -> change to your home directory
+  * cd -> change to your home directory
+  * cd .. -> change to the directory above your current i.e parent directory
+  * cd . -> change to the directory you currently in
+  * cd - -> change to the last visited path
 </b></details>
 
 <details>
@@ -2249,17 +2283,35 @@ mv command.
 </b></details>
 
 <details>
+<summary>What is stored in each of the following paths?</summary><br><b>
+
+  * /bin, /sbin, /usr/bin and /usr/sbin
+  * /etc
+  * /home
+  * /var
+  * /tmp
+</b></details>
+
+<details>
+<summary>What is special about /tmp when compared to other paths?</summary><br><b>
+</b></details>
+
+<details>
 <summary>Explain each field in the output of `ls -l` command</summary><br><b>
-It shows a detailed list of files in a long format. From the left; 
+It shows a detailed list of files in a long format. From the left;
 
 * file permissions, number of links, owner name, owner group, file size, timestamp of last modification and directory/file name
 </b></details>
 
 <details>
 <summary>What are hidden files/directories? How to list them?</summary><br><b>
-These are files directly not displayed after performing a standard ls direct listing. An example of these files are .bashrc which are used to execute some scripts. Some also store configuration about services on your host like .KUBECONFIG. The command used to list them is, 
+These are files directly not displayed after performing a standard ls direct listing. An example of these files are .bashrc which are used to execute some scripts. Some also store configuration about services on your host like .KUBECONFIG. The command used to list them is,
 
 `ls -a`
+</b></details>
+
+<details>
+<summary>Explain piping. How do you perform piping?</summary><br><b>
 </b></details>
 
 <details>
@@ -2272,7 +2324,7 @@ You would solve this by fixing your $PATH variable:
 
 As to fix it there are several options:
 
-1. Manually adding what you need to your $PATH <code>PATH="$PATH":/user/bin:/..etc</code> 
+1. Manually adding what you need to your $PATH <code>PATH="$PATH":/user/bin:/..etc</code>
 2. You have your weird env variables backed up.
 3. You would look for your distro default $PATH variable, copy paste using method #1
 
@@ -2334,13 +2386,13 @@ It adds execute permissions to all sets i.e user, group and others
 <details>
 <summary>Explain what is setgid and setuid</summary><br><b>
 
-* setuid is a linux file permission that permits a user to run a file or program with the permissions of the owner of that file. This is possible by elevation of current user privileges. 
+* setuid is a linux file permission that permits a user to run a file or program with the permissions of the owner of that file. This is possible by elevation of current user privileges.
 * setgid is a process when executed will run as the group that owns the file.
 </b></details>
 
 <details>
 <summary>What is the purpose of sticky bit?</summary><br><b>
-Its a bit that only allows the owner or the root user to delete or modify the file. 
+Its a bit that only allows the owner or the root user to delete or modify the file.
 </b></details>
 
 <details>
@@ -2352,7 +2404,7 @@ Its a bit that only allows the owner or the root user to delete or modify the fi
 
   * chmod - changes access permissions to files system objects
   * chown - changes the owner of file system files and directories
-  * chgrp - changes the group associated with a file system object 
+  * chgrp - changes the group associated with a file system object
 </b></details>
 
 <details>
@@ -2390,7 +2442,7 @@ Hardware -> Kernel -> <u>Daemons</u>, System Libraries, Server Display.
 <summary>Describe how to make a certain process/app a service</summary><br><b>
 </b></details>
 
-##### Debugging (Beginner)
+##### Linux Debugging
 
 <details>
 <summary>Where system logs are located?</summary><br><b>
@@ -2467,10 +2519,22 @@ tail -f <file_name>
 <summary>How you measure time execution of a program?</summary><br><b>
 </b></details>
 
-#### Kernel
+#### Linux Kernel
+
+<details>
+<summary>What is a kernel, and what does it do?</summary><br><b>
+
+The kernel is part of the operating system and is responsible for tasks like:
+
+  * Allocating memory
+  * Schedule processes
+  * Control CPU
+</b></details>
 
 <details>
 <summary>How do you find out which Kernel version your system is using?</summary><br><b>
+
+`uname -a` command
 </b></details>
 
 <details>
@@ -2478,19 +2542,62 @@ tail -f <file_name>
 </b></details>
 
 <details>
-<summary>Explain user space and kernel space</summary><br><b>
+<summary>Explain user space vs. kernel space</summary><br><b>
+
+The operating system executes the kernel in protected memory to prevent anyone from changing (and risking it crashing). This is what is known as "Kernel space".
+"User space" is where users executes their commands or applications. It's important to create this separation since we can't rely on user applications to not tamper with the kernel, causing it to crash.
+
+Applications can access system resources and indirectly the kernel space by making what is called "system calls".
+</b></details>
+
+<details>
+<summary>What are system calls? What system calls are you familiar with?</summary><br><b>
+</b></details>
+
+#### Linux Virtualization
+
+<details>
+<summary>What virtualization solutions are available for Linux?</summary><br><b>
 </b></details>
 
 <details>
 <summary>What is KVM?</summary><br><b>
 </b></details>
 
+#### Linux SSH
+
 <details>
-<summary>What is SSH key? How is it used?</summary><br><b>
+<summary>What is SSH? How to check if a Linux server is running SSH?</summary><br><b>
+
+[Wikipedia Definition](https://en.wikipedia.org/wiki/SSH_(Secure_Shell)): "SSH or Secure Shell is a cryptographic network protocol for operating network services securely over an unsecured network."
+
+[Hostinger.com Definition](https://www.hostinger.com/tutorials/ssh-tutorial-how-does-ssh-work): "SSH, or Secure Shell, is a remote administration protocol that allows users to control and modify their remote servers over the Internet."
+
+An SSH server will have SSH daemon running. Depends on the distribution, you should be able to check whether the service is running (e.g. systemctl status sshd).
+</b></details>
+
+<details>
+<summary>Why SSH is considered better than telnet?</summary><br><b>
+
+Telnet also allows you to connect to a remote host but as opposed to SSH where the communication is encrypted, in telnet, the data is sent in clear text, so it doesn't considered to be secured because anyone on the network can see what exactly is sent, including passwords.
+</b></details>
+
+<details>
+<summary>What is stored in <code>~/.ssh/known_hosts</code>?</summary><br><b>
+</b></details>
+
+<details>
+<summary>You try to ssh to a server and you get "Host key verification failed". What does it mean?</summary><br><b>
+
+It means that the key of the remote host was changed and doesn't match the one that stored on the machine (in ~/.ssh/known_hosts).
 </b></details>
 
 <details>
 <summary>What is the difference between SSH and SSL?</summary><br><b>
+</b></details>
+
+<details>
+<summary>What <code>ssh-keygen</code> is used for?</summary><br><b>
 </b></details>
 
 <details>
@@ -2604,7 +2711,7 @@ Another way to ask this: what happens from the moment you turned on the server u
 
 For each file (and directory) in Linux there is an inode, a data structure which stores meta data
 related to the file like its size, owner, permissions, etc.
-</b></details> 
+</b></details>
 
 <details>
 <summary>Which of the following is not included in inode:
@@ -2658,7 +2765,7 @@ There are many answers for this question. One way is running `df -T`
 
 <details>
 <summary>How to create a
-  * new empty file 
+  * new empty file
   * a file with text (without using text editor)
   * a file with given size</summary><br><b>
 </b></details>
@@ -2710,22 +2817,12 @@ There are many answers for this question. One way is running `df -T`
 
   * sed "s/1/2/g' /tmp/myFile
   * find . -iname \*.yaml -exec sed -i "s/1/2/g" {} ;
-  
+
   </summary><br><b>
 </b>
 <code>sed 's/1/2/g' /tmp/myFile</code><br>
 <code> find . -iname "*.yaml" -exec sed -i "s/1/2/g" {} \; </code>
 </details>
-
-<details>
-<summary>Explain what is stored in each of the following paths and if there is anything unique about it:</summary><br><b>
-
-  * /tmp
-  * /var/log
-  * /bin
-  * /home
-  * /usr/local
-</b></details>
 
 <details>
 <summary>What is stored in each of the following logs?</summary><br><b>
@@ -2781,11 +2878,17 @@ sar -n TCP,ETCP 1
 #### Linux Processes
 
 <details>
+<summary>how to list all the processes running in your system?</summary><br><b>
+
+`ps -ef`
+</b></details>
+
+<details>
 <summary>How to run a process in the background and why to do that in the first place?</summary><br><b>
 
-You can achieve that by specifying & at end of the command.
+You can achieve that by specifying & at the end of the command.
 As to why, since some commands/processes can take a lot of time to finish
-execution or run forever
+execution or run forever, you may want to run them in the background instead of waiting for them to finish before gaining control again in current session.
 </b></details>
 
 <details>
@@ -2832,7 +2935,10 @@ To view all available signals run `kill -l`
 </b></details>
 
 <details>
-<summary>What are daemons?</summary><br><b>
+<summary>What is a Daemon in Linux?</summary><br><b>
+
+A background process. Most of these processes are waiting for requests or set of conditions to be met before actually running anything.
+Some examples: sshd, crond, rpcbind.
 </b></details>
 
 <details>
@@ -2890,10 +2996,6 @@ If you mention at any point ps command with arugments, be familiar with what the
 
 <details>
 <summary>Can you explain how network process/connection is established and how it's terminated?></summary><br></b>
-</b></details>
-
-<details>
-<summary>What are system calls? What system calls are you familiar with?</summary><br><b>
 </b></details>
 
 <details>
@@ -2965,14 +3067,25 @@ This is a great article on the topic: https://www.computerhope.com/jargon/f/file
 <summary>Do you have experience with hardening servers? Can you describe the process?</summary><br><b>
 </b></details>
 
-##### Linux - Networking
+##### Linux Networking
 
 <details>
-<summary>How to list all interfaces?</summary><br><b>
+<summary>How to list all the interfaces?</summary><br><b>
 </b></details>
 
 <details>
-<summary>How to disable an interface?</summary><br><b>
+<summary>What is the loopback (lo) interface?</summary><br><b>
+</b></details>
+
+<details>
+<summary>What the following commands are used for?
+
+  * ip addr
+  * ip route
+  * ip link
+  * ping
+  * netstat
+  * traceroute</summary><br><b>
 </b></details>
 
 <details>
@@ -3055,7 +3168,34 @@ It is a network utility that analyses and may inject tasks into the data-stream 
 One way would be `ping6 ff02::1`
 </b></details>
 
+<details>
+<summary>What is network interface bonding and do you know how it's performed in Linux?</summary><br><b>
+</b></details>
+
+<details>
+<summary>What network bonding modes are there?</summary><br><b>
+
+There a couple of modes:
+
+  * balance-rr: round robing bonding
+  * active-backup: a fault tolerance mode where only one is active
+  * balance-tlb: Adaptive transmit load balancing
+  * balance-alb: Adaptive load balancing
+</b></details>
+
+<details>
+<summary>What is a bridge? How it's added in Linux OS?</summary><br><b>
+</b></details>
+
 ##### Linux DNS
+
+<details>
+<summary>How to check what is the hostname of the system?</summary><br><b>
+
+`cat /etc/hostname`
+
+You can also run `hostnamectl` or `hostname` but that might print only a temporary hostname. The one in the file is the permanent one.
+</b></details>
 
 <details>
 <summary>What the file <code>/etc/resolv.conf</code> is used for? What does it include?</summary><br><b>
@@ -3071,14 +3211,23 @@ You can specify one or more of the following:
  * <code>nslookup</code>
 </b></details>
 
-##### Packaging
+##### Linux Packaging
 
 <details>
 <summary>Do you have experience with packaging? (as in building packages) Can you explain how does it works?</summary><br><b>
 </b></details>
 
 <details>
-<summary>RPM: explain the spec format(what it should and can include)</summary><br><b>
+<summary>How packages installation/removal is performed on the distribution you are using?</summary><br><b>
+
+The answer depends on the distribution being used.
+
+In Fedora/CentOS/RHEL/Rocky it can be done with `rpm` or `dnf` commands.
+In Ubuntu it can be done with the `apt` command.
+</b></details>
+
+<details>
+<summary>RPM: explain the spec format (what it should and can include)</summary><br><b>
 </b></details>
 
 <details>
@@ -3104,7 +3253,7 @@ You can specify one or more of the following:
 <details>
 <summary>Why do we need package managers? Why not simply creating archives and publish them?</summary><br><b>
 
-Package managers allow you to manage packages lifecycle as in installing, removing and update the packages.<br>
+Package managers allow you to manage packages lifecycle as in installing, removing and updating the packages.<br>
 In addition, you can specify in a spec how a certain package will be installed - where to copy the files, which commands to run prior to the installation, post the installation, etc.
 </b></details>
 
@@ -3145,7 +3294,11 @@ Upstart: add Upstart init script at /etc/init/service.conf
 Nginx, Apache httpd.
 </b></details>
 
-##### Users
+##### Linux Users and Groups
+
+<details>
+<summary>What is a "superuser" (or root user)? How is it different from regular users?</summary><br><b>
+</b></details>
 
 <details>
 <summary>How do you create users? Where user information is stored?</summary><br><b>
@@ -3179,7 +3332,7 @@ You can also add a user and then edit /etc/passwd.
 </b></details>
 
 <details>
-<summary>How to switch to another user? How to switch to root?</summary><br><b>
+<summary>How to switch to another user? How to switch to the root user?</summary><br><b>
 
 su command.
 Use su - to switch to root
@@ -3206,7 +3359,16 @@ Re-install the OS IS NOT the right answer :)
 <details>
 <summary>How to see a list of who logged-in to the system?</summary><br><b>
 
-Using the last command.
+Using the `last` command.
+</b></details>
+
+<details>
+<summary>Explain what each of the following commands does:
+
+  * useradd
+  * usermod
+  * whoami
+  * id</summary><br><b>
 </b></details>
 
 #### Linux - Hardware
@@ -3256,10 +3418,6 @@ $OLDPWD
 * ls
 * find .
 * echo *
-</b></details>
-
-<details>
-<summary>What is '|'? What is it used for?</summary><br><b>
 </b></details>
 
 <details>
@@ -3402,8 +3560,10 @@ Notes:
 
 <details>
 <summary>What readdir() system call does?</summary><br><b>
+</b></details>
 
-
+<details>
+<summary>What exactly the command <code>alias x=y</code> does?</summary><br><b>
 </b></details>
 
 #### Linux Filesystem & Files
@@ -3412,7 +3572,7 @@ Notes:
 <summary>How to create a file of a certain size?</summary><br><b>
 
 There are a couple of ways to do that:
-  
+
   * dd if=/dev/urandom of=new_file.txt bs=2MB count=1
   * truncate -s 2M new_file.txt
   * fallocate -l 2097152 new_file.txt
@@ -3526,7 +3686,7 @@ MemAvailable - The amount of available memory for new workloads (without pushing
 </b></details>
 
 <details>
-<summary>What Linux distributions are you familiar with? List at least four?</summary><br><b>
+<summary>What Linux distributions are you familiar with?</summary><br><b>
 </b></details>
 
 <details>
@@ -3565,6 +3725,22 @@ There are many ways to answer that. For those who look for simplicity, the book 
 </b></details>
 
 <details>
+<summary>What is a kernel, and what does it do?</summary><br><b>
+
+The kernel is part of the operating system and is responsible for tasks like:
+
+  * Allocating memory
+  * Schedule processes
+  * Control CPU
+</b></details>
+
+<details>
+<summary>True or False? Some pieces of the code in the kernel are loaded into protected areas of the memory so applications can't overwritten them</summary><br><b>
+
+True
+</b></details>
+
+<details>
 <summary>What is POSIX?</summary><br><b>
 </b></details>
 
@@ -3581,7 +3757,7 @@ A process is a running program. A program is one or more instructions and the pr
 
 It would support the following:
 
-* Create - allow to create new processes 
+* Create - allow to create new processes
 * Delete - allow to remove/destroy processes
 * State - allow to check the state of the process, whether it's running, stopped, waiting, etc.
 * Stop - allow to stop a running process
@@ -3757,7 +3933,7 @@ spun up and shut down, without you tracking every change in these sources.
 ---
 - name: Print information about my host
   hosts: localhost
-  gather_facts: 'no'                                                                                                                                                                           
+  gather_facts: 'no'
   tasks:
       - name: Print hostname
         debug:
@@ -3810,7 +3986,7 @@ When given a written code, always inspect it thoroughly. If your answer is “th
   vars:
       mario_file: /tmp/mario
       package_list:
-          - 'zlib' 
+          - 'zlib'
           - 'vim'
   tasks:
       - name: Check for mario file
@@ -3852,13 +4028,13 @@ When given a written code, always inspect it thoroughly. If your answer is “th
 The playbook to deploy the system_info file
 
 ```
---- 
+---
 - name: Deploy /tmp/system_info file
   hosts: all:!controllers
-  tasks: 
+  tasks:
       - name: Deploy /tmp/system_info
         template:
-            src: system_info.j2 
+            src: system_info.j2
             dest: /tmp/system_info
 ```
 
@@ -3886,7 +4062,32 @@ Variable precedence is about how variables override each other when they set in 
 
 In the context of our question, the order will be extra vars (always override any other variable) -> host facts -> inventory variables -> role defaults (the weakest).
 
-A full list can be found at the link above. Also, note there is a significant difference between Ansible 1.x and 2.x.
+Here is the order of precedence from least to greatest (the last listed variables winning prioritization):
+
+1. command line values (eg “-u user”)
+2. role defaults [[1\]](https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#id15)
+3. inventory file or script group vars [[2\]](https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#id16)
+4. inventory group_vars/all [[3\]](https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#id17)
+5. playbook group_vars/all [[3\]](https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#id17)
+6. inventory group_vars/* [[3\]](https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#id17)
+7. playbook group_vars/* [[3\]](https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#id17)
+8. inventory file or script host vars [[2\]](https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#id16)
+9. inventory host_vars/* [[3\]](https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#id17)
+10. playbook host_vars/* [[3\]](https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#id17)
+11. host facts / cached set_facts [[4\]](https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#id18)
+12. play vars
+13. play vars_prompt
+14. play vars_files
+15. role vars (defined in role/vars/main.yml)
+16. block vars (only for tasks in block)
+17. task vars (only for the task)
+18. include_vars
+19. set_facts / registered vars
+20. role (and include_role) params
+21. include params
+22. extra vars (always win precedence)
+
+A full list can be found at  [PlayBook Variables](https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#ansible-variable-precedence) . Also, note there is a significant difference between Ansible 1.x and 2.x.
 </b></details>
 
 <details>
@@ -3900,6 +4101,33 @@ A full list can be found at the link above. Also, note there is a significant di
   * It’s a best practice to use indention of 2 spaces instead of 4
   * ‘notify’ used to trigger handlers
   * This “hosts: all:!controllers” means ‘run only on controllers group hosts</summary><br><b>
+</b></details>
+
+<details>
+<summary>Explain the Diffrence between Forks and Serial & Throttle.</summary><br><b>
+
+`Serial` is like running the playbook for each host in turn, waiting for completion of the complete playbook before moving on to the next host. `forks`=1 means run the first task in a play on one host before running the same task on the next host, so the first task will be run for each host before the next task is touched. Default fork is 5 in ansible.
+
+```
+[defaults]
+forks = 30
+```
+
+```
+- hosts: webservers
+  serial: 1
+  tasks:
+    - name: ...
+```
+
+Ansible also supports `throttle` This keyword limits the number of workers up to the maximum set via the forks setting or serial. This can be useful in restricting tasks that may be CPU-intensive or interact with a rate-limiting API
+
+```
+tasks:
+- command: /path/to/cpu_intensive_command
+  throttle: 1
+```
+
 </b></details>
 
 <details>
@@ -4035,22 +4263,22 @@ HCL stands for Hashicorp Configuration Language. It is the language Hashicorp ma
 <summary>Explain each of the following:
 
   * Provider
-  * Resource 
-  * Provisioner 
+  * Resource
+  * Provisioner
 </summary><br><b>
-  * Provider is any cloud based technology - github, aws, postgresql etc - which one can make an API call to with its unique terraform provider binary to provision available services and components.<br>  
+  * Provider is any cloud based technology - github, aws, postgresql etc - which one can make an API call to with its unique terraform provider binary to provision available services and components.<br>
   * Resources are the services and components you provision on these platforms.<br>
   * Provisioner in terraform's lingo specifically refers to configuration tools like ansible or salt-stack which are used in combination with terraform to orchestrate a system.
 </b></details>
 
 <details>
-<summary>What <code>terraform.tfstate</code> file is used for?</summary><br><b> 
+<summary>What <code>terraform.tfstate</code> file is used for?</summary><br><b>
 
 It keeps track of the IDs of created resources so that Terraform knows what it is managing.
 </b></details>
 
 <details>
-<summary>How do you rename an existing resource?</summary><br><b> 
+<summary>How do you rename an existing resource?</summary><br><b>
 
 terraform state mv
 </b></details>
@@ -4058,10 +4286,10 @@ terraform state mv
 <details>
 <summary>Explain what the following commands do:
 
-  * <code>terraform init</code> 
-  * <code>terraform plan</code>	
-  * <code>terraform validate</code> 
-  * <code>terraform apply</code> 
+  * <code>terraform init</code>
+  * <code>terraform plan</code>
+  * <code>terraform validate</code>
+  * <code>terraform apply</code>
 </summary><br><b>
 
 <code>terraform init</code> scans your code to figure which providers are you using and download them.
@@ -4142,14 +4370,14 @@ Output variables are named values that are sourced from the attributes of a modu
 
 <details>
 <summary>Explain "Remote State". When would you use it and how?</summary><br><b>
-  Terraform generates a `terraform.tfstate` json file that describes components/service provisioned on the specified provider. Remote  
+  Terraform generates a `terraform.tfstate` json file that describes components/service provisioned on the specified provider. Remote
   State stores this file in a remote storage media to enable collaboration amongst team.
 </b></details>
 
 <details>
 <summary>Explain "State Locking"</summary><br><b>
-  State locking is a mechanism that blocks an operations against a specific state file from multiple callers so as to avoid conflicting operations from different team members. Once the first caller's operation's lock is released the other team member may go ahead to   
-  carryout his own operation. Nevertheless Terraform will first check the state file to see if the desired resource already exist and 
+  State locking is a mechanism that blocks an operations against a specific state file from multiple callers so as to avoid conflicting operations from different team members. Once the first caller's operation's lock is released the other team member may go ahead to
+  carryout his own operation. Nevertheless Terraform will first check the state file to see if the desired resource already exist and
   if not it goes ahead to create it.
 </b></details>
 
@@ -4169,11 +4397,10 @@ Output variables are named values that are sourced from the attributes of a modu
   It is also common in the community to use a tool called <code>terragrunt</code> to explicitly inject variables between modules.
 </b></details>
 
-## Docker
+## Containers
 
 <details>
-<summary>What is Docker? What is it used for?</summary><br><b>
-Docker container image is a lightweight, standalone, executable package of software that includes everything needed to run an application: code, runtime, system tools, system libraries and settings.
+<summary>What is a Container? What is it used for?</summary><br><b>
 </b></details>
 
 <details>
@@ -4201,11 +4428,11 @@ You should choose containers when:
 </b></details>
 
 <details>
-<summary>Explain Docker architecture</summary><br><b>
+<summary>Explain Podman or Docker architecture</summary><br><b>
 </b></details>
 
 <details>
-<summary>Describe in detail what happens when you run `docker run hello-world`?</summary><br><b>
+<summary>Describe in detail what happens when you run `podman/docker run hello-world`?</summary><br><b>
 
 Docker CLI passes your request to Docker daemon.
 Docker daemon downloads the image from Docker Hub
@@ -4271,13 +4498,13 @@ Applied tar sha256:514c3a3e64d4ebf15f482c9e8909d130bcd53bcc452f0225b0a04744de7b8
 
 <details>
 <summary>How do you run a container?</summary><br><b>
-	
-docker run
+
+`podman run` or `docker run`
 </b></details>
 
 <details>
-<summary>What `docker commit` does?. When will you use it?</summary><br><b>
-	
+<summary>What `podman commit` does?. When will you use it?</summary><br><b>
+
 Create a new image from a container’s changes
 </b></details>
 
@@ -4302,7 +4529,7 @@ Create a new image from a container’s changes
 
 <details>
 <summary>How do you remove old, non running, containers?</summary><br><b>
-	
+
 1. To remove one or more Docker images use the docker container rm command followed by the ID of the containers you want to remove.
 2. The docker system prune command will remove all stopped containers, all dangling images, and all unused networks
 3. docker rm $(docker ps -a -q) - This command will delete all stopped containers. The command docker ps -a -q will return all existing container IDs and pass them to the rm command which will delete them. Any running containers will not be deleted.
@@ -4312,13 +4539,13 @@ Create a new image from a container’s changes
 
 <details>
 <summary>What is Dockerfile</summary><br><b>
-	
+
 Docker can build images automatically by reading the instructions from a Dockerfile. A Dockerfile is a text document that contains all the commands a user could call on the command line to assemble an image.
 </b></details>
 
 <details>
 <summary>What is the difference between ADD and COPY in Dockerfile?</summary><br><b>
-	
+
 COPY takes in a src and destination. It only lets you copy in a local file or directory from your host (the machine building the Docker image) into the Docker image itself.
 ADD lets you do that too, but it also supports 2 other sources. First, you can use a URL instead of a local file / directory. Secondly, you can extract a tar file from the source directly into the destination.
 Although ADD and COPY are functionally similar, generally speaking, COPY is preferred. That’s because it’s more transparent than ADD. COPY only supports the basic copying of local files into the container, while ADD has some features (like local-only tar extraction and remote URL support) that are not immediately obvious.
@@ -4326,7 +4553,7 @@ Although ADD and COPY are functionally similar, generally speaking, COPY is pref
 
 <details>
 <summary>What is the difference between CMD and RUN in Dockerfile?</summary><br><b>
-	
+
 RUN lets you execute commands inside of your Docker image. These commands get executed once at build time and get written into your Docker image as a new layer.
 CMD is the command the container executes by default when you launch the built image. A Dockerfile can only have one CMD.
 You could say that CMD is a Docker run-time operation, meaning it’s not something that gets executed at build time. It happens when you run an image. A running image is called a container.
@@ -4340,7 +4567,7 @@ A common answer to this is to use [hadolint](https://github.com/hadolint/hadolin
 
 <details>
 <summary>Explain what is Docker compose and what is it used for</summary><br><b>
-	
+
 Compose is a tool for defining and running multi-container Docker applications. With Compose, you use a YAML file to configure your application’s services. Then, with a single command, you create and start all the services from your configuration.
 
 For example, you can use it to set up ELK stack where the services are: elasticsearch, logstash and kibana. Each running in its own container.
@@ -4382,9 +4609,9 @@ Swarm management which means you can create new swarms in Docker Cloud.
 
 <details>
 <summary>Explain image layers</summary><br><b>
-	
+
 A Docker image is built up from a series of layers. Each layer represents an instruction in the image’s Dockerfile. Each layer except the very last one is read-only.
-Each layer is only a set of differences from the layer before it. The layers are stacked on top of each other. When you create a new container, you add a new writable layer on top of the underlying layers. This layer is often called the “container layer”. All changes made to the running container, such as writing new files, modifying existing files, and deleting files, are written to this thin writable container layer. 
+Each layer is only a set of differences from the layer before it. The layers are stacked on top of each other. When you create a new container, you add a new writable layer on top of the underlying layers. This layer is often called the “container layer”. All changes made to the running container, such as writing new files, modifying existing files, and deleting files, are written to this thin writable container layer.
 The major difference between a container and an image is the top writable layer. All writes to the container that add new or modify existing data are stored in this writable layer. When the container is deleted, the writable layer is also deleted. The underlying image remains unchanged.
 Because each container has its own writable container layer, and all changes are stored in this container layer, multiple containers can share access to the same underlying image and yet have their own data state.
 </b></details>
@@ -4474,6 +4701,12 @@ False. A Kubernetes cluster consists of at least 1 master and 0 or more workers.
 </b></details>
 
 <details>
+<summary>True or False? The API server is the only component which communicates directly with etcd</summary><br><b>
+
+True
+</b></details>
+
+<details>
 <summary>What are the components of a worker node?</summary><br><b>
 
   * Kubelet - an agent responsible for node communication with the master.
@@ -4554,7 +4787,7 @@ More on this topic [here](https://kubernetes.io/docs/concepts/services-networkin
 </b></details>
 
 <details>
-<summary>What services types are there?</summary><br><b>	
+<summary>What services types are there?</summary><br><b>
 </b></details>
 
 <details>
@@ -4595,7 +4828,7 @@ More on this topic [here](https://kubernetes.io/docs/concepts/services-networkin
 <summary> How does scheduling work in kubernetes?</summary><br><b>
 
 The control plane component kube-scheduler asks the following questions,
-1. What to schedule? It tries to understand the pod-definition specifications 
+1. What to schedule? It tries to understand the pod-definition specifications
 2. Which node to schedule? It tries to determine the best node with available resources to spin a pod
 3. Binds the Pod to a given node
 
@@ -4649,15 +4882,15 @@ kubectl create quota some-quota --hard-cpu=2,pods=2
 
 ```
 cat << EOF | kubectl create -f -
-> apiVersion: v1
-> kind: Pod
-> metadata:
->   name: nginx
-> spec:
->   containers:
->   - name: nginx
->     image: nginx
-> EOF
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+EOF
 ```
 </b></details>
 
@@ -4718,9 +4951,15 @@ kubectl delete pods --field-selector=status.phase!='Running'
 </b></details>
 
 <details>
-<summary>How to display the resources usages of pods?</code></summary><br><b>
+<summary>How to display the resources usages of pods?</summary><br><b>
 
 kubectl top pod
+</b></details>
+
+<details>
+<summary>What <code>kubectl get componentstatus</code> does?</summary><br><b>
+
+Outputs the status of each of the control plane components.
 </b></details>
 
 <details>
@@ -4988,7 +5227,7 @@ SOLID is:
 * Single Responsibility - A class should only have a single responsibility
 * Open-Closed - An entity should be open for extension, but closed for modification. What this practically means is that you should extend functionality by adding a new code and not by modifying it. Your system should be separated into components so it can be easily extended without breaking everything.
 * Liskov Substitution - Any derived class should be able to substitute the its parent without altering its corrections. Practically, every part of the code will get the expected result no matter which part is using it
-* Interface segregation - A client should never depend on anything it doesn't uses 
+* Interface segregation - A client should never depend on anything it doesn't uses
 * Dependency Inversion - High level modules should depend on abstractions, not low level modules
 </b></details>
 
@@ -5016,6 +5255,10 @@ SOLID is:
 <summary>Explain big O notation</summary><br><b>
 </b></details>
 
+<details>
+<summary>What is "Duck Typing"?</summary><br><b>
+</b></details>
+
 ##### Common algorithms
 
 <details>
@@ -5025,7 +5268,7 @@ SOLID is:
   * Can you implement it? (in any language you prefer)
   * What is the average performance of the algorithm you wrote?</summary><br><b>
 
-It's a search algorithm used with sorted arrays/lists to find a target value by dividing the array each iteration and comparing the middle value to the target value. If the middle value is smaller than target value, then the target value is searched in the right part of the divided array, else in the left side. This continues until the value is found (or the array divided max times) 
+It's a search algorithm used with sorted arrays/lists to find a target value by dividing the array each iteration and comparing the middle value to the target value. If the middle value is smaller than target value, then the target value is searched in the right part of the divided array, else in the left side. This continues until the value is found (or the array divided max times)
 
 [python implementation](coding/python/binary_search.py)
 
@@ -5152,7 +5395,7 @@ There are many other characteristics but these are the main ones that every pyth
 </b></details>
 
 <details>
-<summary>What is mutability? Which of the built-in types in Python are mutable? How can you show that a certain data type is mutable?</summary><br><b>
+<summary>What is mutability? Which of the built-in types in Python are mutable?</summary><br><b>
 
 Mutability determines whether you can modify an object of specific type.
 
@@ -5161,7 +5404,7 @@ The mutable data types are:
     List
     Dictionary
     Set
-    
+
 The immutable data types are:
 
     Numbers (int, float, ...)
@@ -5169,8 +5412,6 @@ The immutable data types are:
     Bool
     Tuple
     Frozenset
-
-You can usually use the function hash() to check an object mutability. If an object is hashable, it is immutable (although this does not always work as intended as user defined objects might be mutable and hashable).
 </b></details>
 
 <details>
@@ -5204,7 +5445,7 @@ You can usually use the function hash() to check an object mutability. If an obj
 </b></details>
 
 <details>
-<summary>What is the result of `bool("")`? What about `bool(" ")`?</summary><br><b>
+<summary>What is the result of `bool("")`? What about `bool(" ")`? Explain</summary><br><b>
 
 bool("") -> evaluates to False
 bool("  ") -> evaluates to True
@@ -5241,7 +5482,12 @@ if lower(input("Insert a character: ")[0]) in "aieou": # Takes care of multiple 
 
 <details>
 <summary>How to define a function with Python?</summary><br><b>
-Using the `def` keyword
+Using the `def` keyword. For Examples:
+
+```
+def sum(a, b):
+    return (a + b)
+```
 </b></details>
 
 <details>
@@ -5257,7 +5503,6 @@ def my_function():
 
 You can then assign a function to a variables like this `x = my_function` or you can return functions as return values like this `return my_function`
 </b></details>
-
 
 <details>
 <summary>Explain inheritance and how to use it in Python</summary><br><b>
@@ -5350,31 +5595,31 @@ class MyClass(object):
 Generally, every compiling process have a two steps.
     - Analysis
     - Code Generation.
-    
+
     Analysis can be broken into:
         1. Lexical analysis   (Tokenizes source code)
         2. Syntactic analysis (Check whether the tokens are legal or not, tldr, if syntax is correct)
-           
+
                for i in 'foo'
                           ^
              SyntaxError: invalid syntax
-        
+
         We missed ':'
-        
-        
+
+
         3. Semantic analysis  (Contextual analysis, legal syntax can still trigger errors, did you try to divide by 0,
           hash a mutable object or use an undeclared function?)
-          
+
                  1/0
                 ZeroDivisionError: division by zero
-        
+
     These three analysis steps are the responsible for error handlings.
-    
+
     The second step would be responsible for errors, mostly syntax errors, the most common error.
     The third step would be responsible for Exceptions.
-    
+
     As we have seen, Exceptions are semantic errors, there are many builtin Exceptions:
-        
+
         ImportError
         ValueError
         KeyError
@@ -5382,33 +5627,33 @@ Generally, every compiling process have a two steps.
         IndentationError
         IndexError
         ...
-    
+
     You can also have user defined Exceptions that have to inherit from the `Exception` class, directly or indirectly.
 
     Basic example:
-        
+
     class DividedBy2Error(Exception):
         def __init__(self, message):
             self.message = message
-    
-    
+
+
     def division(dividend,divisor):
         if divisor == 2:
             raise DividedBy2Error('I dont want you to divide by 2!')
         return dividend / divisor
-    
+
     division(100, 2)
-    
+
     >>> __main__.DividedBy2Error: I dont want you to divide by 2!
 ```
 </b></details>
 
 <details>
 <summary>Explain Exception Handling and how to use it in Python</summary><br><b>
-	
+
 **Exceptions:** Errors detected during execution are called Exceptions.
 
-**Handling Exception:** When an error occurs, or exception as we call it, Python will normally stop and generate an error message.</br> 
+**Handling Exception:** When an error occurs, or exception as we call it, Python will normally stop and generate an error message.</br>
 Exceptions can be handled using `try` and `except` statement in python.
 
 **Example:** Following example asks the user for input until a valid integer has been entered. </br>
@@ -5434,13 +5679,21 @@ For more details about errors and exceptions follow this [https://docs.python.or
 <details>
 <summary>Explain the following built-in functions (their purpose + use case example):
 
-  * repr 
+  * repr
   * any
   * all</summary><br><b>
 </b></details>
 
 <details>
 <summary>What is the difference between repr function and str?</summary><br><b>
+</b></details>
+
+<details>
+<summary>What is the __call__ method?</summary><br><b>
+</b></details>
+
+<details>
+<summary>Do classes has the __call__ method as well? What for?</summary><br><b>
 </b></details>
 
 <details>
@@ -5519,7 +5772,7 @@ x, y = y, x
 <details>
 <summary>Explain the following object's magic variables:
 
-  * __dict__ 
+  * __dict__
 </summary><br><b>
 </b></details>
 
@@ -5630,7 +5883,7 @@ nested_li = [['1', '2', '3'], ['4', '5', '6']]
 <summary>How to merge two sorted lists into one sorted list?</summary><br><b>
 
 ```
-sorted(li1 + li2) 
+sorted(li1 + li2)
 ```
 
 Another way:
@@ -5647,7 +5900,7 @@ while i < len(li1) and j < len(li2):
         merged_li.append(li2[j])
         j += 1
 
-merged_li = merged_li + merged_li[i:] + merged_li[j:] 
+merged_li = merged_li + merged_li[i:] + merged_li[j:]
 ```
 </b></details>
 
@@ -5701,7 +5954,7 @@ def is_unique4(l:list) -> bool:
 
 ```
 def my_func(li = []):
-    li.append("hmm")  
+    li.append("hmm")
     print(li)
 ```
 
@@ -5787,7 +6040,7 @@ set([food for bro in x for food in bro['food']])
 ```
 </b></details>
 
-#### Dictionaries
+#### Python Dictionaries
 
 <details>
 <summary>How to create a dictionary?</summary><br><b>
@@ -5800,7 +6053,7 @@ my_dict = dict([('x', 1), ('y', 2)])
 </b></details>
 
 <details>
-<summary>How to remove an item from a dictionary?</summary><br><b>
+<summary>How to remove a key from a dictionary?</summary><br><b>
 
 del my_dict['some_key']
 you can also use `my_dict.pop('some_key')` which returns the value of the key.
@@ -5827,6 +6080,20 @@ dict(sorted(some_dictionary.items()))
 
 ```
 some_dict1.update(some_dict2)
+```
+</b></details>
+
+
+<details>
+<summary>Convert the string "a.b.c" to the dictionary <code>{'a': {'b': {'c': 1}}}</code></summary><br><b>
+
+```
+output = {}
+string = "a.b.c"
+path = string.split('.')
+target = reduce(lambda d, k: d.setdefault(k, {}), path[:-1], output)
+target[path[-1]] = 1
+print(output)
 ```
 </b></details>
 
@@ -5922,6 +6189,10 @@ Using the re module
 #### Python Strings
 
 <details>
+<summary>Find the first repeated character in a string</summary><br><b>
+</b></details>
+
+<details>
 <summary>How to extract the unique characters from a string? for example given the input "itssssssameeeemarioooooo" the output will be "mrtisaoe"</summary><br><b>
 
 ```
@@ -6002,7 +6273,7 @@ Detailed answer can be found here: http://codingshell.com/python-all-string-perm
 <details>
 <summary>How to reverse a string? (e.g. pizza -> azzip)</summary><br><b>
 
-The correct way is: 
+The correct way is:
 
 ```
 my_string[::-1]
@@ -6018,6 +6289,10 @@ def reverse_string(string):
         temp =  char + temp
     return temp
 ```
+</b></details>
+
+<details>
+<summary>Reverse each word in a string (while keeping the order)</summary><br><b>
 </b></details>
 
 <details>
@@ -6128,12 +6403,12 @@ pdb :D
 
 Short answer is: It returns a None object.
 
-We could go a bit deeper and explain the difference between 
+We could go a bit deeper and explain the difference between
 
 ```
 def a ():
     return
-    
+
 >>> None
 ```
 
@@ -6142,7 +6417,7 @@ And
 ```
 def a ():
     pass
-    
+
 >>> None
 ```
 Or we could be asked this as a following question, since they both give the same result.
@@ -6172,14 +6447,14 @@ Disassembly of <code object b at 0x0000029C4D3C2ED0, file "<dis>", line 5>:
 ```
 
 An empty <code> return</code> is exactly the same as <code>return None</code> and functions without any explicit return
-will always return None regardless of the operations, therefore 
+will always return None regardless of the operations, therefore
 
 
 ```
 def sum(a, b):
     global c
     c = a + b
-    
+
 >>> None
 ```
 </b></details>
@@ -6195,7 +6470,7 @@ for i in range(1, 10):
 </summary><br><b>
 
 ```
-[for i in in range(1, 10)]
+[i for i in range(1, 10)]
 ```
 </b></details>
 
@@ -6213,7 +6488,7 @@ What would be the result of is_int(2) and is_int(False)?
 </summary><br><b>
 </b></details>
 
-##### Data Structures & Types
+#### Python Data Structures & Types
 
 <details>
 <summary>Implement Stack in Python</summary><br><b>
@@ -6223,7 +6498,7 @@ What would be the result of is_int(2) and is_int(False)?
 <summary>Implement Hash table in Python</summary><br><b>
 </b></details>
 
-##### Python Testing
+#### Python Testing
 
 <details>
 <summary>What is your experience with writing tests in Python?</summary><br><b>
@@ -6270,7 +6545,7 @@ PEP8 is a list of coding conventions and style guidelines for Python
 #### Flask
 
 <details>
-<summary>You wrote you have experience with Django/Flask. Can you describe what is Django/Flask and how you have used it? Why Flask and not Djano? (or vice versa)</summary><br><b>
+<summary>Can you describe what is Django/Flask and how you have used it? Why Flask and not Djano? (or vice versa)</summary><br><b>
 </b></details>
 
 <details>
@@ -6278,7 +6553,11 @@ PEP8 is a list of coding conventions and style guidelines for Python
 </b></details>
 
 <details>
-<summary>How do you manage DB integration?</summary><br><b>
+<summary>What is a blueprint in Flask?</summary><br><b>
+</b></details>
+
+<details>
+<summary>What is a template?</summary><br><b>
 </b></details>
 
 #### zip
@@ -6306,8 +6585,62 @@ list(zip(range(5), range(50), range(-2)))
 ```
 </b></details>
 
-#### Misc
+#### Python Descriptors
 
+<details>
+<summary>Explain Descriptors</summary><br><b>
+
+Read about descriptors [here](https://docs.python.org/3/howto/descriptor.html)
+</b></details>
+
+<details>
+<summary>What would be the result of running <code>a.num2</code> assuming the following code
+
+```
+class B:
+    def __get__(self, obj, objtype=None):
+        reuturn 10
+
+class A:
+    num1 = 2
+    num2 = Five()
+```
+</summary><br><b>
+10
+</b></details>
+
+<details>
+<summary>What would be the result of running <code>some_car = Car("Red", 4)</code> assuming the following code
+
+```
+class Print:
+
+    def __get__(self, obj, objtype=None):
+        value = obj._color
+        print("Color was set to {}".format(valie))
+        return value
+
+    def __set__(self, obj, value):
+        print("The color of the car is {}".format(value))
+        obj._color = value
+
+class Car:
+
+    color = Print()
+
+    def __ini__(self, color, age):
+        self.color = color
+        self.age = age
+```
+</summary><br><b>
+An instance of Car class will be created and the following will be printed: "The color of the car is Red"
+</b></details>
+
+#### Python Misc
+
+<details>
+<summary>How can you spawn multiple processes with Python?</summary><br><b>
+</b></details>
 
 <details>
 <summary>Implement simple calculator for two numbers</summary><br><b>
@@ -6315,8 +6648,8 @@ list(zip(range(5), range(50), range(-2)))
 ```
 def add(num1, num2):
     return num1 + num2
-        
-        
+
+
 def sub(num1, num2):
     return num1 - num2
 
@@ -6328,11 +6661,11 @@ def mul(num1, num2):
 def div(num1, num2):
     return num1 / num2
 
-operators = { 
+operators = {
     '+': add,
     '-': sub,
     '*': mul,
-    '/': div 
+    '/': div
 }
 
 if __name__ == '__main__':
@@ -6361,7 +6694,7 @@ def wee(word):
 
 def oh(f):
     return f + "Ohh"
-    
+
 >>> oh(wee("Wee"))
 <<< Wee Ohh
 ```
@@ -6510,10 +6843,6 @@ a = f()
 </b></details>
 
 <details>
-<summary>Explain Descriptors</summary><br><b>
-</b></details>
-
-<details>
 <summary>Do you have experience with web scraping? Can you describe what have you used and for what?</summary><br><b>
 </b></details>
 
@@ -6636,6 +6965,16 @@ Alert manager is responsible for alerts ;)
 </b></details>
 
 ## Git
+
+<details>
+<summary>How do you know if directory you are in is a git repository?</summary><br><b>
+
+You can check if there is a ".git" directory.
+</b></details>
+
+<details>
+<summary>How to check if a file is tracked and if not, then track it?</summary><br><b>
+</b></details>
 
 <details>
 <summary>What is the difference between <code>git pull</code> and <code>git fetch</code>?</summary><br><b>
@@ -6782,7 +7121,7 @@ False. If you would like to keep a file on your filesystem, use `git reset <file
 Probably good to mention that it's:
 
   * It's good for cases of merging more than one branch (and also the default of such use cases)
-  * It's primarily meant for bundling topic branches together 
+  * It's primarily meant for bundling topic branches together
 
 This is a great article about Octopus merge: http://www.freblogg.com/2016/12/git-octopus-merge.html
 </b></details>
@@ -6794,12 +7133,12 @@ This is a great article about Octopus merge: http://www.freblogg.com/2016/12/git
 <summary>What are some characteristics of the Go programming language?</summary><br><b>
 
   * Strong and static typing - the type of the variables can't be changed over time and they have to be defined at compile time
-  * Simplicity 
+  * Simplicity
   * Fast compile times
   * Built-in concurrency
   * Garbage collected
   * Platform independent
-  * Compile to standalone binary - anything you need to run your app will be compiled into one binary. Very useful for version management in run-time. 
+  * Compile to standalone binary - anything you need to run your app will be compiled into one binary. Very useful for version management in run-time.
 
 Go also has good community.
 </b></details>
@@ -6911,7 +7250,7 @@ Go's iota identifier is used in const declarations to simplify definitions of in
 
 <details>
 <summary>What _ is used for in Go?</summary><br><b>
-	
+
 It avoids having to declare all the variables for the returns values.
 It is called the [blank identifier](https://golang.org/doc/effective_go.html#blank).
 <br>
@@ -6945,16 +7284,16 @@ Since the first iota is declared with the value `3` (` + 3`), the next one has t
 
 ```
 package main
- 
+
 import (
 	"fmt"
 	"sync"
 	"time"
 )
- 
+
 func main() {
 	var wg sync.WaitGroup
-	
+
 	wg.Add(1)
 	go func() {
 		time.Sleep(time.Second * 2)
@@ -6993,17 +7332,17 @@ func mod1(a []int) {
 	for i := range a {
 		a[i] = 5
 	}
-	
+
 	fmt.Println("1:", a)
 }
 
 func mod2(a []int) {
 	a = append(a, 125) // !
-	
+
 	for i := range a {
 		a[i] = 5
 	}
-	
+
 	fmt.Println("2:", a)
 }
 
@@ -7026,7 +7365,7 @@ Output: <code><br>
 2 [1 2 3 4]<br>
 </code>
 
-In `mod1` a is link, and when we're using `a[i]`, we're changing `s1` value to. 
+In `mod1` a is link, and when we're using `a[i]`, we're changing `s1` value to.
 But in `mod2`, `append` creats new slice, and we're changing only `a` value, not `s2`.
 
 [Aritcle about arrays](https://golangbot.com/arrays-and-slices/),
@@ -7069,7 +7408,7 @@ func main() {
 	h := &IntHeap{4, 8, 3, 6}
 	heap.Init(h)
 	heap.Push(h, 7)
-  
+
   fmt.Println((*h)[0])
 }
 ```
@@ -7097,7 +7436,7 @@ MongoDB advantages are as followings:
 <summary>What is the difference between SQL and NoSQL?</summary><br><b>
 
 The main difference is that SQL databases are structured (data is stored in the form of
-tables with rows and columns - like an excel spreadsheet table) while NoSQL is 
+tables with rows and columns - like an excel spreadsheet table) while NoSQL is
 unstructured, and the data storage can vary depending on how the NoSQL DB is set up, such
 as key-value pair, document-oriented, etc.
 </b></details>
@@ -7136,6 +7475,17 @@ as key-value pair, document-oriented, etc.
 <summary>Explain this query: <code>db.books.find().sort({x:1})</code></summary><br><b>
 </b></details>
 
+<details>
+<summary>What is the difference between find() and find_one()?</code></summary><br><b>
+</b></details>
+
+<details>
+<summary>How can you export data from Mongo DB?</code></summary><br><b>
+
+* mongoexport
+* programming languages
+</b></details>
+
 ## OpenShift
 
 <details>
@@ -7144,6 +7494,12 @@ as key-value pair, document-oriented, etc.
 
 <details>
 <summary>Can you explain the difference between OpenShift and Kubernetes?</summary><br><b>
+</b></details>
+
+<details>
+<summary>True or False? OpenShift is a IaaS (infrastructure as a service) solution</summary><br><b>
+
+False. OpenShift is a PaaS (platform as a service) solution.
 </b></details>
 
 <details>
@@ -7205,7 +7561,7 @@ Answer: Magnetic is about 10ms and SSD is somewhere between 0.08 and 0.16ms
 <summary>What this line in scripts mean?: <code>#!/bin/bash</code></summary><br><b>
 
 
-`#!/bin/bash` is She-bang 
+`#!/bin/bash` is She-bang
 
 /bin/bash is the most common shell used as default shell for user login of the linux system. The shell’s name is an acronym for Bourne-again shell. Bash can execute the vast majority of scripts and thus is widely used because it has more features, is well developed and better syntax.
 
@@ -7217,7 +7573,7 @@ Answer: Magnetic is about 10ms and SSD is somewhere between 0.08 and 0.16ms
 Few example:
 
   * Comments on how to run it and/or what it does
-  * Adding "set -e" since I want the script to exit if a certain command failed 
+  * Adding "set -e" since I want the script to exit if a certain command failed
 
 You can have an entirely different answer. It's based only on your experience.
 </b></details>
@@ -7323,7 +7679,7 @@ ping -c 3 $SERVERIP > /dev/null 2>&1
 if [ $? -ne 0 ]
 then
    # Use mailer here:
-   mailx -s "Server $SERVERIP is down" -t "$NOTIFYEMAIL" < /dev/null 
+   mailx -s "Server $SERVERIP is down" -t "$NOTIFYEMAIL" < /dev/null
 fi
 ```
 
@@ -7370,11 +7726,11 @@ A short way of using if/else. An example:
 
 <details>
 <summary>What does the following code do and when would you use it?
-	
+
 <code>diff <(ls /tmp) <(ls /var/tmp)</code>
 
 </summary><br>
-It is called 'process substitution'. It provides a way to pass the output of a command to another command when using a pipe <code>|</code> is not possible. It can be used when a command does not support <code>STDIN</code> or you need the output of multiple commands. 
+It is called 'process substitution'. It provides a way to pass the output of a command to another command when using a pipe <code>|</code> is not possible. It can be used when a command does not support <code>STDIN</code> or you need the output of multiple commands.
 https://superuser.com/a/1060002/167769
 </details>
 
@@ -7392,7 +7748,7 @@ Structured Query Language
 <summary>How is SQL Different from NoSQL</summary><br><b>
 
 The main difference is that SQL databases are structured (data is stored in the form of
-tables with rows and columns - like an excel spreadsheet table) while NoSQL is 
+tables with rows and columns - like an excel spreadsheet table) while NoSQL is
 unstructured, and the data storage can vary depending on how the NoSQL DB is set up, such
 as key-value pair, document-oriented, etc.
 </b></details>
@@ -7402,11 +7758,11 @@ as key-value pair, document-oriented, etc.
 
 ACID stands for Atomicity, Consistency, Isolation, Durability. In order to be ACID compliant, the database much meet each of the four criteria
 
-**Atomicity** - When a change occurs to the database, it should either succeed or fail as a whole. 
+**Atomicity** - When a change occurs to the database, it should either succeed or fail as a whole.
 
-For example, if you were to update a table, the update should completely execute. If it only partially executes, the 
+For example, if you were to update a table, the update should completely execute. If it only partially executes, the
 update is considered failed as a whole, and will not go through - the DB will revert back to it's original
-state before the update occurred. It should also be mentioned that Atomicity ensures that each 
+state before the update occurred. It should also be mentioned that Atomicity ensures that each
 transaction is completed as it's own stand alone "unit" - if any part fails, the whole statement fails.
 
 **Consistency** - any change made to the database should bring it from one valid state into the next.
@@ -7424,10 +7780,10 @@ time you executed your query, 15 of the 20 changes had gone through, but 5 were 
 only see the 15 changes that had completed - you wouldn't see the database mid-update as the change goes through.
 
 **Durability** - Once a change is committed, it will remain committed regardless of what happens
-(power failure, system crash, etc.). This means that all completed transactions 
-must be recorded in non-volatile memory. 
+(power failure, system crash, etc.). This means that all completed transactions
+must be recorded in non-volatile memory.
 
-Note that SQL is by nature ACID compliant. Certain NoSQL DB's can be ACID compliant depending on 
+Note that SQL is by nature ACID compliant. Certain NoSQL DB's can be ACID compliant depending on
 how they operate, but as a general rule of thumb, NoSQL DB's are not considered ACID compliant
 </details>
 
@@ -7437,8 +7793,8 @@ how they operate, but as a general rule of thumb, NoSQL DB's are not considered 
 SQL - Best used when data integrity is crucial. SQL is typically implemented with many
 businesses and areas within the finance field due to it's ACID compliance.
 
-NoSQL - Great if you need to scale things quickly. NoSQL was designed with web applications 
-in mind, so it works great if you need to quickly spread the same information around to 
+NoSQL - Great if you need to scale things quickly. NoSQL was designed with web applications
+in mind, so it works great if you need to quickly spread the same information around to
 multiple servers
 
 Additionally, since NoSQL does not adhere to the strict table with columns and rows structure
@@ -7449,14 +7805,14 @@ that Relational Databases require, you can store different data types together.
 <summary>What is a Cartesian Product?</summary><br>
 
 A Cartesian product is when all rows from the first table are joined to all rows in the second
-table. This can be done implicitly by not defining a key to join, or explicitly by 
+table. This can be done implicitly by not defining a key to join, or explicitly by
 calling a CROSS JOIN on two tables, such as below:
 
 Select * from customers **CROSS JOIN** orders;
 
 Note that a Cartesian product can also be a bad thing - when performing a join
 on two tables in which both do not have unique keys, this could cause the returned information
-to be incorrect. 
+to be incorrect.
 </details>
 
 ##### SQL Specific Questions
@@ -7546,8 +7902,8 @@ Inner JOIN cat_food f <br>
   ON c.Customer_ID = f.Customer_ID <br>
 where c.Customer_ID in (Select Customer_ID from cat_food);
 
-Although this was a simple statement, the "with" clause really shines when 
-a complex query needs to be run on a table before joining to another. With statements are nice, 
+Although this was a simple statement, the "with" clause really shines when
+a complex query needs to be run on a table before joining to another. With statements are nice,
 because you create a pseudo temp when running your query, instead of creating a whole new table.
 
 The Sum of all the purchases of cat food weren't readily available, so we used a with statement to create
@@ -7704,7 +8060,7 @@ startap-script
 
 <details>
 <summary>What is Cloud Code?</summary><br><b>
-It is a set of tools to help developers write, run and debug GCP kubernetes based applications. It provides built-in support for rapid iteration, debugging and running applications in development and production K8s environments. 
+It is a set of tools to help developers write, run and debug GCP kubernetes based applications. It provides built-in support for rapid iteration, debugging and running applications in development and production K8s environments.
 </b></details>
 
 ### Google Kubernetes Engine (GKE)
@@ -7719,12 +8075,12 @@ It is a set of tools to help developers write, run and debug GCP kubernetes base
 
 <details>
 <summary>What is Anthos</summary><br><b>
-It is a managed application platform for organisations like enterprises that require quick modernisation and certain levels 
+It is a managed application platform for organisations like enterprises that require quick modernisation and certain levels
 of consistency for their legacy applications in a hybrid or multicloud world. From this explanation the core ideas can be drawn from these statements;
 
 * Managed -> the customer does not need to worry about the underlying software intergrations, they just enable the API.
 * application platform -> It consists of open source tools like K8s, Knative, Istio and Tekton
-* Enterprises -> these are usually organisations with complex needs 
+* Enterprises -> these are usually organisations with complex needs
 * Consistency -> to have the same policies declaratively initiated to be run anywhere securely e.g on-prem, GCP or other-clouds (AWS or Azure)
 
 fun fact: Anthos is flower in greek, they grow in the ground (earth) but need rain from the clouds to flourish.
@@ -7751,15 +8107,15 @@ fun fact: Anthos is flower in greek, they grow in the ground (earth) but need ra
 <summary>How does Anthos handle the control plane and node components for GKE?</summary><br><b>
 
 On GCP the kubernetes api-server is the only control plane component exposed to customers whilst compute engine manages
-instances in the project. 
+instances in the project.
 </b></details>
 
 <details>
 <summary>Which load balancing options are available?</summary><br><b>
 
 * Networking load balancing for L4 and HTTP(S) Load Balancing for L7 which are both managed services that do not require
-  additional configuration. 
-* Ingress for Anthos which allows the ability to deploy a load balancer that serves an application across multiple clusters 
+  additional configuration.
+* Ingress for Anthos which allows the ability to deploy a load balancer that serves an application across multiple clusters
   on GKE
 </b></details>
 
@@ -7773,10 +8129,10 @@ instances in the project.
 <summary>List and explain the enterprise security capabilities provided by Anthos</summary><br><b>
 
 * Control plane security - GCP manages and maintains the K8s control plane out of the box. The user can secure the api-server by using master authorized networks and private clusters. These allow the user to disable access on the public IP address by assigning a private IP address to the master.
-* Node security - By default workloads are provisioned on Compute engine instances that use Google's Container Optimised OS. This operating system implements a locked-down firewall, limited user accounts with root disabled and a read-only filesystem. There is a further option to enable GKE Sandbox for stronger isolation in multi-tenant deployment scenarios. 
-* Network security - Within a created cluster VPC, Anthos GKE leverages a powerful software-defined network that enables simple Pod-to-Pod communications. Network policies allow locking down ingress and egress connections in a given namespace. Filtering can also be implemented to incoming load-balanced traffic for services that require external access, by supplying whitelisted CIDR IP ranges. 
+* Node security - By default workloads are provisioned on Compute engine instances that use Google's Container Optimised OS. This operating system implements a locked-down firewall, limited user accounts with root disabled and a read-only filesystem. There is a further option to enable GKE Sandbox for stronger isolation in multi-tenant deployment scenarios.
+* Network security - Within a created cluster VPC, Anthos GKE leverages a powerful software-defined network that enables simple Pod-to-Pod communications. Network policies allow locking down ingress and egress connections in a given namespace. Filtering can also be implemented to incoming load-balanced traffic for services that require external access, by supplying whitelisted CIDR IP ranges.
 * Workload security - Running workloads run with limited privileges, default Docker AppArmor security policies are applied to all Kubernetes Pods. Workload identity for Anthos GKE aligns with the open source kubernetes service accounts with GCP service account permissions.
-* Audit logging - Adminstrators are given a way to retain, query, process and alert on events of the deployed environments. 
+* Audit logging - Adminstrators are given a way to retain, query, process and alert on events of the deployed environments.
 </b></details>
 
 <details>
@@ -7799,13 +8155,13 @@ It is a core component of the Anthos stack which provides platform, service and 
 
 1. An importer that reads from a central Git repository
 2. A component that synchronises stored configuration data into K8s objects
-3. A component that monitors drift between desired and actual cluster configurations with a capability of reconciliation when need rises. 
+3. A component that monitors drift between desired and actual cluster configurations with a capability of reconciliation when need rises.
 </b></details>
 
 <details>
 <summary>How does Anthos Config Management help?</summary><br><b>
 
-It follows common modern software development practices which makes cluster configuration, management and policy changes auditable, revertable, and versionable easily enforcing IT governance and unifying resource management in an organisation. 
+It follows common modern software development practices which makes cluster configuration, management and policy changes auditable, revertable, and versionable easily enforcing IT governance and unifying resource management in an organisation.
 </b></details>
 
 <details>
@@ -7824,18 +8180,18 @@ It follows common modern software development practices which makes cluster conf
 <details>
 <summary>What are the components of the managed control plane of Anthos Service Mesh?</summary><br><b>
 
-1. Traffic Director - it is GCP's fully managed service mesh traffic control plane, responsible for translating Istio API objects into configuration information for the distributed proxies, as well as directing service mesh ingress and egress traffic 
+1. Traffic Director - it is GCP's fully managed service mesh traffic control plane, responsible for translating Istio API objects into configuration information for the distributed proxies, as well as directing service mesh ingress and egress traffic
 2. Managed CA - is a centralised certificate authority responsible for providing SSL certificates to each of the distributed proxies, authentication information and distributing secrets
-3. Operations tooling - formerly stackdriver, provides a managed ingestion point for observability and telemetry, specifically monitoring, tracing and logging data generated by each of the proxies. This powers the observability dashboard for operators to visually inspect their services and service dependencies assisting in the implementation of SRE best practices for monitoring SLIs and establishing SLOs. 
+3. Operations tooling - formerly stackdriver, provides a managed ingestion point for observability and telemetry, specifically monitoring, tracing and logging data generated by each of the proxies. This powers the observability dashboard for operators to visually inspect their services and service dependencies assisting in the implementation of SRE best practices for monitoring SLIs and establishing SLOs.
 </b></details>
 
 <details>
 <summary>How does Anthos Service Mesh help?</summary><br><b>
 Tool and technology integration that makes up Anthos service mesh delivers signficant operational benefits to Anthos environments, with minimal additional overhead such as follows:
 
-* Uniform observability - the data plane reports service to service communication back to the control plane generating a service dependency graph. Traffic inspection by the proxy inserts headers to facilitate distributed tracing, capturing and reporting service logs together with service-level metrics (i.e latency, errors, availability). 
+* Uniform observability - the data plane reports service to service communication back to the control plane generating a service dependency graph. Traffic inspection by the proxy inserts headers to facilitate distributed tracing, capturing and reporting service logs together with service-level metrics (i.e latency, errors, availability).
 * Operational agility - fine-grained controls for managing the flow of inter-mesh (north-south) and intra-mesh (east-west) traffic are provided.
-* Policy-driven security - policies can be enforced consistently across diverse protocols and runtimes as service communications are secured by default. 
+* Policy-driven security - policies can be enforced consistently across diverse protocols and runtimes as service communications are secured by default.
 </b></details>
 
 <details>
@@ -7850,7 +8206,7 @@ Tool and technology integration that makes up Anthos service mesh delivers signf
 <details>
 <summary>What is Cloud Run for Anthos?</summary><br><b>
 
-It is part of the Anthos stack that brings a serverless container experience to Anthos, offering a high-level platform experience on top of K8s clusters. It is built with Knative, an open-source operator for K8s that brings serverless application serving and eventing capabilities. 
+It is part of the Anthos stack that brings a serverless container experience to Anthos, offering a high-level platform experience on top of K8s clusters. It is built with Knative, an open-source operator for K8s that brings serverless application serving and eventing capabilities.
 </b></details>
 
 <details>
@@ -7860,9 +8216,9 @@ Platform teams in organisations that wish to offer developers additional tools t
 
 * Easy migration from K8s deployments - Without Cloud Run, platform engineers have to configure deployment, service, and HorizontalPodAutoscalers(HPA) objects to a loadbalancer and autoscaling. If application is already serving traffic it becomes hard to change configurations or roll back efficiently. Using Cloud Run all this is managed thus the Knative service manifest describes the application to be autoscaled and loadbalanced
 * Autoscaling - a sudden traffic spike may cause application containers in K8s to crash due to overload thus an efficient automated autoscaling is executed to serve the high volume of traffic
-* Networking - it has built-in load balancing capabilities and policies for traffic splitting between multiple versions of an application. 
-* Releases and rollouts - supports the notion of the Knatibe API's revisions which describe new versions or different configurations of your application and canary deployments by splitting traffic. 
-* Monitoring - observing and recording metrics such as latency, error rate and requests per second. 
+* Networking - it has built-in load balancing capabilities and policies for traffic splitting between multiple versions of an application.
+* Releases and rollouts - supports the notion of the Knatibe API's revisions which describe new versions or different configurations of your application and canary deployments by splitting traffic.
+* Monitoring - observing and recording metrics such as latency, error rate and requests per second.
 </b></details>
 
 <details>
@@ -7870,7 +8226,7 @@ Platform teams in organisations that wish to offer developers additional tools t
 
 * Rapid, request-based autoscaling - default autoscalers monitor request metrics which allows Cloud Run for Anthos to handle spiky traffic patterns smoothly
 * Concurrency controls - limits such as max in-flight requests per container are enforced to ensure the container does not become overloaded and crash. More containers are added to handle the spiky traffic, buffering the requests.
-* Scale to zero - if an application is inactive for a while Cloud Run scales it down to zero to reduce its footprint. Alternatively one can turn off scale-to-zero to prevent cold starts. 
+* Scale to zero - if an application is inactive for a while Cloud Run scales it down to zero to reduce its footprint. Alternatively one can turn off scale-to-zero to prevent cold starts.
 </b></details>
 
 <details>
@@ -8009,7 +8365,7 @@ You can read about TripleO right [here](https://docs.openstack.org/tripleo-docs/
   * neutron-metering-agent
   * neutron-*-agtent
   * neutron-server</summary><br><b>
- 
+
 
   * neutron-l3-agent - L3/NAT forwarding (provides external network access for VMs for example)
   * neutron-dhcp-agent - DHCP services
@@ -8173,7 +8529,7 @@ Using:
   * AdminURL</summary><br><b>
 
   * PublicURL - Publicly accessible through public internet
-  * InternalURL - Used for communication between services 
+  * InternalURL - Used for communication between services
   * AdminURL - Used for administrative management
 </b></details>
 
@@ -8192,7 +8548,7 @@ A list of services and their endpoints
   * Sahara
   * Ironic
   * Trove
-  * Aodh 
+  * Aodh
   * Ceilometer</summary><br><b>
 
   * Swift - highly available, distributed, eventually consistent object/blob store
@@ -8280,7 +8636,7 @@ A list of services and their endpoints
 <summary>What types of Nova proxies are you familiar with?</summary><br><b>
 
   * Nova-novncproxy - Access through VNC connections
-  * Nova-spicehtml5proxy - Access through SPICE 
+  * Nova-spicehtml5proxy - Access through SPICE
   * Nova-xvpvncproxy - Access through a VNC connection
 </b></details>
 
@@ -8366,20 +8722,68 @@ Access control based on user roles (i.e., a collection of access authorizations 
 
 </b></details>
 
+## Security SSH
+
 <details>
-<summary>Explain Symmetric encryption</summary><br><b>
+<summary>What is SSH how does it work?</summary><br><b>
 
-A symmetric encryption is any technique where the same key is used to both encrypt and decrypt the data. 
+[Wikipedia Definition](https://en.wikipedia.org/wiki/SSH_(Secure_Shell)): "SSH or Secure Shell is a cryptographic network protocol for operating network services securely over an unsecured network."
 
+[Hostinger.com Definition](https://www.hostinger.com/tutorials/ssh-tutorial-how-does-ssh-work): "SSH, or Secure Shell, is a remote administration protocol that allows users to control and modify their remote servers over the Internet."
+
+[This site](https://www.hostinger.com/tutorials/ssh-tutorial-how-does-ssh-work) explains it in a good way.
 </b></details>
 
 <details>
-<summary>Explain Asymmetric encryption</summary><br><b>
+<summary>What is the role of an SSH key?</summary><br><b>
+</b></details>
+
+## Security Cryptography
+
+<details>
+<summary>Explain Symmetrical encryption</summary><br><b>
+
+A symmetric encryption is any technique where a key is used to both encrypt and decrypt the data/entire communication.
+</b></details>
+
+<details>
+<summary>Explain Asymmetrical encryption</summary><br><b>
 
 A asymmetric encryption is any technique where the there is two different keys that are used for encryption and decryption, these keys are known as public key and private key.
-
 </b></details>
 
+<details>
+<summary>What is "Key Exchange" (or "key establishment") in cryptography?</summary><br><b>
+
+[Wikipedia](https://en.wikipedia.org/wiki/Key_exchange): "Key exchange (also key establishment) is a method in cryptography by which cryptographic keys are exchanged between two parties, allowing use of a cryptographic algorithm."
+</b></details>
+
+<details>
+<summary>True or False? The symmetrical encryption is making use of public and private keys where the private key is used to decrypt the data encrypted with a public key</summary><br><b>
+
+False. This description fits the asymmetrical encryption.
+</b></details>
+
+<details>
+<summary>True or False? The private key can be mathematically computed from a public key</summary><br><b>
+False.
+</b></details>
+
+<details>
+<summary>True or False? In the case of SSH, asymmetrical encryption is not used to the entire SSH session</summary><br><b>
+
+True. It is only used during the key exchange algorithm of symmetric encryption.
+</b></details>
+
+<details>
+<summary>What is Hashing?</summary><br><b>
+</b></details>
+
+<details>
+<summary>How hashes are part of SSH?</summary><br><b>
+
+Hashes used in SSH to verify the authenticity of messages and to verify that nothing tampered with the data received.
+</b></details>
 
 <details>
 <summary>Explain the following:
@@ -8391,12 +8795,18 @@ A asymmetric encryption is any technique where the there is two different keys t
 </b></details>
 
 <details>
+<summary>Are you familiar with "OWASP top 10"?</summary><br><b>
+
+Read about it [here](https://owasp.org/www-project-top-ten)
+</b></details>
+
+<details>
 <summary>What is XSS?</summary><br><b>
 
 Cross Site Scripting (XSS) is an type of a attack when the attacker inserts browser executable code within a HTTP response. Now the injected attack is not stored in the web application, it will only affact the users who open the maliciously crafted link or third-party web page. A successful attack allows the attacker to access any cookies, session tokens, or other sensitive information retained by the browser and used with that site 
 
 You can test by detecting user-defined variables and how to input them. This includes hidden or non-obvious inputs such as HTTP parameters, POST data, hidden form field values, and predefined radio or selection values. You then analyze each found vector to see if their are potential vulnerabilities, then when found you craft input data with each input vector. Then you test the crafted input and see if it works.
-	
+
 </b></details>
 
 <details>
@@ -8466,7 +8876,7 @@ You can test by using a stored procedure, so the application must be sanitize th
 DNS spoofing occurs when a particular DNS server’s records of “spoofed” or altered maliciously to redirect traffic to the attacker. This redirection of traffic allows the attacker to spread malware, steal data, etc.
 
 **Prevention**
-- Use encrypted data transfer protocols - Using end-to-end encryption vian SSL/TLS will help decrease the chance that a website / its visitors are compromised by DNS spoofing. 
+- Use encrypted data transfer protocols - Using end-to-end encryption vian SSL/TLS will help decrease the chance that a website / its visitors are compromised by DNS spoofing.
 - Use DNSSEC - DNSSEC, or Domain Name System Security Extensions, uses digitally signed DNS records to help determine data authenticity.
 - Implement DNS spoofing detection mechanisms - it’s important to implement DNS spoofing detection software. Products such as XArp help product against ARP cache poisoning by inspecting the data that comes through before transmitting it.
 
@@ -8512,7 +8922,7 @@ Spectre is an attack method which allows a hacker to “read over the shoulder�
 Cross-Site Request Forgery (CSRF) is an attack that makes the end user to initate a unwanted action on the web application in which the user has a authenticated session, the attacker may user an email and force the end user to click on the link and that then execute malicious actions. When an CSRF attack is successful it will compromise the end user data 
 
 You can use OWASP ZAP to analyze a "request", and if it appears that there no protection against cross-site request forgery when the Security Level is set to 0 (the value of csrf-token is SecurityIsDisabled.) One can use data from this request to prepare a CSRF attack by using OWASP ZAP
-	
+
 </b></details>
 
 <details>
@@ -8580,8 +8990,18 @@ MAC address flooding attack (CAM table flooding attack) is a type of network att
 <details>
 <summary>What is Cache Poisoned Denial of Service?</summary><br><b>
 
-CPDoS or Cache Poisoned Denial of Service. It poisons the CDN cache. By manipulating certain header requests, the attacker forces the origin server to return a Bad Request error which is stored in the CDN’s cache. Thus, every request that comes after the attack will get an error page. 
+CPDoS or Cache Poisoned Denial of Service. It poisons the CDN cache. By manipulating certain header requests, the attacker forces the origin server to return a Bad Request error which is stored in the CDN’s cache. Thus, every request that comes after the attack will get an error page.
 
+</b></details>
+
+#### Security - Threats
+
+<details>
+<summary>Explain "Advanced persistent threat (APT)"</summary><br><b>
+</b></details>
+
+<details>
+<summary>What is a "Backdoor" in information security?</summary><br><b>
 </b></details>
 
 ## Puppet
@@ -8667,7 +9087,7 @@ From the official docs:
 </b></details>
 
 <details>
-<summary>Describe what happens from the moment an app logged some information until it's displayed to the user in a dashboard when the Elastic stack is used</summary><br><b>  
+<summary>Describe what happens from the moment an app logged some information until it's displayed to the user in a dashboard when the Elastic stack is used</summary><br><b>
 
 The process may vary based on the chosen architecture and the processing you may want to apply to the logs. One possible workflow is:
 
@@ -9008,7 +9428,7 @@ A (Address) Maps a host name to an IP address. When a computer has multiple adap
 
 <details>
 <summary>What is a AAAA record?</summary><br><b>
-	
+
 An AAAA Record performs the same function as an A Record, but for an IPv6 Address.
 </b></details>
 
@@ -9026,7 +9446,7 @@ MX (Mail Exchange) Specifies a mail exchange server for the domain, which allows
 <details>
 <summary>Is DNS using TCP or UDP?</summary><br><b>
 
-DNS uses UDP port 53 for resolving queries either regular or reverse. DNS uses TCP for zone transfer. 
+DNS uses UDP port 53 for resolving queries either regular or reverse. DNS uses TCP for zone transfer.
 </b></details>
 
 <details>
@@ -9069,7 +9489,7 @@ According to the CAP theorem, it's not possible for a distributed data store to 
 
 * Availability: Every request receives a response (it doesn't has to be the most recent data)
 * Consistency: Every request receives a response with the latest/most recent data
-* Partition tolerance: Even if some the data is lost/dropped, the system keeps running 
+* Partition tolerance: Even if some the data is lost/dropped, the system keeps running
 </b></details>
 
 <details>
@@ -9125,6 +9545,12 @@ I like this definition from [here](https://blog.christianposta.com/microservices
 
 <details>
 <summary>What is a Debuggger and how it works?</summary><br><b>
+</b></details>
+
+<details>
+<summary>What is Metadata?</summary><br><b>
+
+Data about data. Basically, it describes the type of information that an underlying data will hold.
 </b></details>
 
 <details>
@@ -9278,19 +9704,19 @@ TODO: explain what is actually a Cookie
 </b></details>
 
 <details>
-<summary>What is HTTP Pipelining?</summary><br><b> 
+<summary>What is HTTP Pipelining?</summary><br><b>
 </b></details>
 
 <details>
-<summary>What is a proxy?</summary><br><b> 
+<summary>What is a proxy?</summary><br><b>
 </b></details>
 
 <details>
-<summary>What is a reverse proxy?</summary><br><b> 
+<summary>What is a reverse proxy?</summary><br><b>
 </b></details>
 
 <details>
-<summary>What is CDN?</summary><br><b> 
+<summary>What is CDN?</summary><br><b>
 </b></details>
 
 <details>
@@ -9300,7 +9726,7 @@ TODO: explain what is actually a Cookie
 #### Load Balancing
 
 <details>
-<summary>What is a load balancer?</summary><br><b> 
+<summary>What is a load balancer?</summary><br><b>
 </b></details>
 
 <details>
@@ -9337,6 +9763,15 @@ Pros:
   * Round Robin
   * Least Connection
   * Source IP hash</summary><br><b>
+</b></details>
+
+
+<details>
+<summary>Explain use case for connection draining?</summary><br><b>
+To ensure that a Classic Load Balancer stops sending requests to instances that are de-registering or unhealthy, while keeping the existing connections open, use connection draining. This enables the load balancer to complete in-flight requests made to instances that are de-registering or unhealthy.
+
+The maximum timeout value can be set between 1 and 3,600 seconds on both GCP and AWS.
+
 </b></details>
 
 #### Licenses
@@ -9425,14 +9860,7 @@ Relax, there is no wrong or right answer here...I think.
 </b></details>
 
 <details>
-<summary>Where do you see yourself in 5 years?</summary><br><b>
-
-Some ideas (some of them bad and should not be used):
-
-* Senior DevOps
-* Manager
-* Retirement
-* Your manager
+<summary>Where do you see yourself 5 years down the line?</summary><br><b>
 </b></details>
 
 <details>
@@ -9485,7 +9913,7 @@ You know the best :)
 You can use and elaborate on one or all of the following:
 
 * Passion
-* Motivation 
+* Motivation
 * Autodidact
 * Creativity (be able to support it with some actual examples)
 </b></details>
@@ -9532,11 +9960,11 @@ These are only a suggestion, use them carefully. Not every interviewer will be a
 <details>
 <summary>What is the current level of technical debt you are dealing with?</summary><br><b>
 
-Be careful when asking this question - all companies, regardless of size, have some level of tech debt. 
+Be careful when asking this question - all companies, regardless of size, have some level of tech debt.
 Phrase the question in the light that all companies have the deal with this, but you want to see the current
 pain points they are dealing with <br>
 
-This is a great way to figure how managers deal with unplanned work, and how good they are at 
+This is a great way to figure how managers deal with unplanned work, and how good they are at
 setting expectations with projects.
 </b></details>
 
@@ -9547,7 +9975,7 @@ setting expectations with projects.
 <details>
 <summary>What was your favorite project you've worked on?</summary><br><b>
 
-This can give you insights in some of the cool projects a company is working on, and if 
+This can give you insights in some of the cool projects a company is working on, and if
 you would enjoy working on projects like these. This is also a good way to see if
 the managers are allowing employees to learn and grow with projects outside of the
 normal work you'd do.
@@ -9617,6 +10045,14 @@ Not only this will tell you what is expected from you, it will also provide big 
 ## Databases
 
 <details>
+<summary>What is sharding?</summary><br><b>
+
+Sharding is a horizontal partitioning.
+
+Are you able to explain what is it good for?
+</b></details>
+
+<details>
 <summary>What is a connection pool?</summary><br><b>
 
 Connection Pool is a cache of database connections and the reason it's used is to avoid an overhead of establishing a connection for every query done to a database.
@@ -9644,12 +10080,6 @@ A connection leak is a situation where database connection isn't closed after be
 <summary>What is a Data Warehouse?</summary><br><b>
 
 "A data warehouse is a subject-oriented, integrated, time-variant and non-volatile collection of data in support of organisation's decision-making process"
-</b></details>
-
-<details>
-<summary>What is a data lake?</summary><br><b>
-
-A single data source (at least usually) which is stored in a raw format.
 </b></details>
 
 <details>
@@ -9878,8 +10308,8 @@ Read about it [here](https://en.wikipedia.org/wiki/Cache_replacement_policies)
 You can mention:
 
 roll-back & roll-forward
-cut over 
-dress rehearsals 
+cut over
+dress rehearsals
 DNS redirection
 </b></details>
 
@@ -9939,6 +10369,18 @@ As defined by Doug Laney:
 </b></details>
 
 <details>
+<summary>What is DataOps? How is it related to DevOps?</summary><br><b>
+</b></details>
+
+<details>
+<summary>What is Data Architecture?</summary><br><b>
+
+An answer from [talend.com](https://www.talend.com/resources/what-is-data-architecture):
+
+"Data architecture is the process of standardizing how organizations collect, store, transform, distribute, and use data. The goal is to deliver relevant data to people who need it, when they need it, and help them make sense of it."
+</b></details>
+
+<details>
 <summary>Explain the different formats of data</summary><br><b>
 
 * Structured - data that has defined format and length (e.g. numbers, words)
@@ -9957,6 +10399,14 @@ As defined by Doug Laney:
 <summary>What is Data Lake?</summary><br><b>
 
 [Data Lake - Wikipedia](https://en.wikipedia.org/wiki/Data_lake)
+</b></details>
+
+<details>
+<summary>Can you explain the difference between a data lake and a data warehouse?</summary><br><b>
+</b></details>
+
+<details>
+<summary>What is "Data Versioning"? What models of "Data Versioning" are there?</summary><br><b>
 </b></details>
 
 #### Apache Hadoop
@@ -10001,6 +10451,92 @@ A programming model for large-scale data processing
 * Namenode controls all metadata
 </b></details>
 
+## Ceph
+
+<details>
+<summary>Explain what is Ceph</summary><br><b>
+</b></details>
+
+<details>
+<summary>True or False? Ceph favor consistency and correctness over performances</summary><br><b>
+True
+</b></details>
+
+<details>
+<summary>Which services or types of storage Ceph supports?</summary><br><b>
+
+* Object (RGW)
+* Block (RBD)
+* File (CephFS)
+</b></details>
+
+<details>
+<summary>What is RADOS?</summary><br><b>
+
+* Reliable Autonomic Distributed Object Storage
+* Provides low-level data object storage service
+* Strong Consistency
+* Simplifies design and implementation of higher layers (block, file, object)
+</b></details>
+
+<details>
+<summary>Describe RADOS software components</summary><br><b>
+
+* Monitor
+  * Central authority for authentication, data placement, policy
+  * Coordination point for all other cluster components
+  * Protect critical cluster state with Paxos
+* Manager
+  * Aggregates real-time metrics (throughput, disk usage, etc.)
+  * Host for pluggable management functions
+  * 1 active, 1+ standby per cluster
+* OSD (Object Storage Daemon)
+  * Stores data on an HDD or SSD
+  * Services client IO requests
+</b></details>
+
+<details>
+<summary>What is the workflow of retrieving data from Ceph?</summary><br><b>
+</b></details>
+
+<details>
+<summary>What is the workflow of retrieving data from Ceph?</summary><br><b>
+</b></details>
+
+<details>
+<summary>What are "Placement Groups"?</summary><br><b>
+</b></details>
+
+<details>
+<summary>Describe in the detail the following: Objects -> Pool -> Placement Groups -> OSDs</summary><br><b>
+</b></details>
+
+<details>
+<summary>What is OMAP?</summary><br><b>
+</b></details>
+
+<details>
+<summary>What is a metadata server? How it works?</summary><br><b>
+</b></details>
+
+## Packer
+
+<details>
+<summary>What is Packer? What is it used for?</summary><br><b>
+
+In general, Packer automates machine images creation.
+It allows you to focus on configuration prior to deployment while making the images. This allows you start the instances much faster in most cases.
+</b></details>
+
+<details>
+<summary>Packer follows a "configuration->deployment" model or "deployment->configuration"?</summary><br><b>
+
+A configuration->deployment which has some advantages like:
+
+1. Deployment Speed - you configure once prior to deployment instead of configuring every time you deploy. This allows you to start instances/services much quicker.
+2. More immutable infrastructure - with configuration->deployment it's not likely to have very different deployments since most of the configuration is done prior to the deployment. Issues like dependencies errors are handled/discovered prior to deployment in this model.
+</b></details>
+
 ## Certificates
 
 If you are looking for a way to prepare for a certain exam this is the section for you. Here you'll find a list of certificates, each references to a separate file with focused questions that will help you to prepare to the exam. Good luck :)
@@ -10036,9 +10572,10 @@ Below you can find several exercises
 
 * [CI for open source project](exercises/ci_for_open_source_project.md)
 
-#### Python 
+#### Programming
 
-* [grep before and after](exercises/grep_berfore_and_after.md)
+* [grep before and after](exercises/programming/grep_berfore_and_after.md)
+* [web scrapper](exercises/programming/web_scraper.md)
 
 #### Mixed
 
@@ -10047,7 +10584,7 @@ Below you can find several exercises
 
 #### Misc
 
-* [Elasticsearch & Kibana on AWS](exercises/elk_kibana_aws.md)
+* [Elasticsearch & Kibana on AWS](exercises/misc/elk_kibana_aws.md)
 * [ELK & Filebeat](exercises/eflk.md)
 * [Ansible, Minikube and Docker](exercises/ansible_minikube_docker.md)
 * [Cloud Slack bot](exercises/cloud_slack_bot.md)
